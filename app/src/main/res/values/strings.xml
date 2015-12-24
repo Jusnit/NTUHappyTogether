@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">NTUHappyTogether</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_lobby">Lobby</string>
+    <string name="parse_app_id">Uhtbbo4I3d4Ab423vvjyztOmvGgn8IO7jFJC6sWu</string>
+    <string name="parse_client_key">wfIxmz6rm34WrEbaXxiVLovNemlSqjmJq93sSd3M</string>
+    <string name="title_activity_join_event">JoinEventActivity</string>
+</resources>

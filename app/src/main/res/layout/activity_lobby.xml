@@ -1,0 +1,78 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.user.ntuhappytogether.Lobby"
+    android:background="@drawable/parchment">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:paddingTop="@dimen/hobby_pic_padding_top"
+            android:paddingBottom="@dimen/hobby_pic_padding_bottom"
+            android:paddingRight="@dimen/hobby_pic_padding_right"
+            android:paddingLeft="@dimen/hobby_pic_padding_left">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="5"
+                android:src="@drawable/create_event"
+                android:scaleType="fitXY"
+                android:id="@+id/create_event" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="建立活動"
+                android:id="@+id/textView"
+                android:layout_gravity="center"
+                android:textSize="@dimen/lobby_label_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:paddingTop="@dimen/hobby_pic_padding_top"
+            android:paddingBottom="@dimen/hobby_pic_padding_bottom"
+            android:paddingRight="@dimen/hobby_pic_padding_right"
+            android:paddingLeft="@dimen/hobby_pic_padding_left"
+            >
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="5"
+                android:src="@drawable/join_event"
+                android:id="@+id/join_event"
+                android:scaleType="fitXY" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="加入活動"
+                android:id="@+id/textView2"
+                android:textSize="@dimen/lobby_label_size"
+                android:layout_gravity="center"
+                android:textAlignment="center" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"></LinearLayout>
+</LinearLayout>
