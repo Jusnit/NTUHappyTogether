@@ -17,11 +17,14 @@ import android.widget.TextView;
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class LoginActivity extends Activity {
@@ -39,28 +42,54 @@ public class LoginActivity extends Activity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
-        ParseCloud.callFunctionInBackground("hello", new HashMap<String, Object>(), new FunctionCallback<String>() {
-            public void done(String result, ParseException e) {
+        HashMap<String,String> query = new HashMap();
+        query.put("title","食飯");
+        ParseCloud.callFunctionInBackground("query", query, new FunctionCallback<ArrayList<ParseObject>>() {
+            public void done(ArrayList<ParseObject> result, ParseException e) {
                 if (e == null) {
-                    Log.i(tag, result);
+                    try {
+                        //JSONObject jsonObj = new JSONObject(result);
+                        for(ParseObject temp : result) {
+                            Log.i(tag, temp.getString("title"));
+                            //Log.i(tag,result.get("comment").toString());
+                        }
+
+
+
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                    }
+                    Log.i(tag, result+":hellofunction");
+
                 }
             }
         });
+        ParseObject testObject = new ParseObject("Event");
+        //testObject.put("name", "Jusnit");
+        String s  = testObject.getObjectId();
+        // Log.i("Event Object Id:", s);
+
+        //testObject.setObjectId("yYq1c85QtH");
+//        testObject.put("limit", 20);
+//        testObject.put("title","食飯");
+//        testObject.put("context","context");
+//
+//        testObject.saveInBackground();
         HashMap<String,String> create = new HashMap<String,String>();
         create.put("title","titleAndroid");
         create.put("context", "contextAndroid");
         create.put("limit", "10");
 
-        JSONObject createObj = new JSONObject();
-        try{
-            createObj.put("title","titleAndroid");
-            createObj.put("context", "contextAndroid");
-            createObj.put("limit", "10");
-        }catch(Exception e){}
-        ParseCloud.callFunctionInBackground("create", create, new FunctionCallback<String>() {
-            public void done(String result, ParseException e) {
+//        JSONObject createObj = new JSONObject();
+//        try{
+//            createObj.put("title","titleAndroid");
+//            createObj.put("context", "contextAndroid");
+//            createObj.put("limit", "10");
+//        }catch(Exception e){}
+        ParseCloud.callFunctionInBackground("create", create, new FunctionCallback<Integer>() {
+            public void done(Integer result, ParseException e) {
                 if (e == null) {
-                    Log.i(tag,result);
+                    Log.i(tag,""+result);
                 }
                 else
                     Log.i(tag, e.getMessage());
@@ -78,12 +107,12 @@ public class LoginActivity extends Activity {
         directEnter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent().setClass(LoginActivity.this,Lobby.class));
+                startActivity(new Intent().setClass(LoginActivity.this, Lobby.class));
                 finish();
             }
         });
 
-        register.setOnClickListener(new RegisterOnClickListener() );
+        register.setOnClickListener(new RegisterOnClickListener());
 
     }
     class RegisterOnClickListener implements View.OnClickListener{
