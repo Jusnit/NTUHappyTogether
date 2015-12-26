@@ -14,9 +14,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.parse.FunctionCallback;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
 
 public class LoginActivity extends Activity {
 
@@ -25,12 +31,41 @@ public class LoginActivity extends Activity {
     private EditText password;
     private EditText email;
     private Button register;
+
+    private static final String tag = "LoginActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
+        ParseCloud.callFunctionInBackground("hello", new HashMap<String, Object>(), new FunctionCallback<String>() {
+            public void done(String result, ParseException e) {
+                if (e == null) {
+                    Log.i(tag, result);
+                }
+            }
+        });
+        HashMap<String,String> create = new HashMap<String,String>();
+        create.put("title","titleAndroid");
+        create.put("context", "contextAndroid");
+        create.put("limit", "10");
+
+        JSONObject createObj = new JSONObject();
+        try{
+            createObj.put("title","titleAndroid");
+            createObj.put("context", "contextAndroid");
+            createObj.put("limit", "10");
+        }catch(Exception e){}
+        ParseCloud.callFunctionInBackground("create", create, new FunctionCallback<String>() {
+            public void done(String result, ParseException e) {
+                if (e == null) {
+                    Log.i(tag,result);
+                }
+                else
+                    Log.i(tag, e.getMessage());
+            }
+        });
         setWidget();
     }
 
