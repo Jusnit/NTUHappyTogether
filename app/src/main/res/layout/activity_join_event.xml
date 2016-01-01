@@ -19,14 +19,14 @@
                 android:layout_width="0dp"
                 android:layout_weight="5"
                 android:layout_height="wrap_content"
-                android:id="@+id/editText3" />
+                android:id="@+id/keyword" />
 
             <Button
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="搜尋"
-                android:id="@+id/button" />
+                android:id="@+id/searching_button" />
         </LinearLayout>
 
         <LinearLayout
@@ -85,6 +85,7 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="8"
-            android:id="@+id/listView" />
+            android:id="@+id/listView"
+            android:visibility="visible" />
     </LinearLayout>
 </RelativeLayout>
