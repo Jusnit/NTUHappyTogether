@@ -30,9 +30,8 @@ import ParseUtil.ParseFunction;
 
 public class LoginActivity extends Activity {
 
-    private TextValidation textValidation;
     private Register register;
-    private TextView directEnter,registerText,loginText;
+    private TextView registerText,loginText,logoutText;
 
 
     private static final String tag = "LoginActivity";
@@ -69,21 +68,30 @@ public class LoginActivity extends Activity {
     }
 
     private void setWidget(){
-        this.directEnter = (TextView)findViewById(R.id.direct_enter);
+
         registerText = (TextView)findViewById(R.id.registerText);
         loginText = (TextView)findViewById(R.id.login_text);
-        directEnter.setOnClickListener(new View.OnClickListener() {
+        logoutText = (TextView)findViewById(R.id.logoutText);
+
+        registerText.setOnClickListener(new RegisterTextOnClickListener());
+        loginText.setOnClickListener(new LoginTextOnClickListener());
+        logoutText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent().setClass(LoginActivity.this, Lobby.class));
-                finish();
+                if(ParseUser.getCurrentUser() == null){
+                    Toast t = Toast.makeText(LoginActivity.this,"尚未登入!",Toast.LENGTH_SHORT);
+                    t.show();
+                }
+                else {
+                    ParseUser.logOut();
+                    Toast t = Toast.makeText(LoginActivity.this,"已登出!",Toast.LENGTH_SHORT);
+                    t.show();
+
+                }
             }
         });
-        registerText.setOnClickListener(new RegisterTextOnClickListener());
-
-       // registerButton.setOnClickListener(new RegisterOnClickListener());
         register = new Register();
-        textValidation = new TextValidation();
+
 
     }
 //
@@ -133,6 +141,11 @@ public class LoginActivity extends Activity {
     class LoginTextOnClickListener implements View.OnClickListener{
         @Override
         public void onClick(View v){
+            if(ParseUser.getCurrentUser() != null){
+                startActivity(new Intent().setClass(LoginActivity.this, Lobby.class));
+                Log.i(tag, "現有user login");
+                return;
+            }
 
             final View item = LayoutInflater.from(LoginActivity.this).inflate(R.layout.login_dialog, null);
             new AlertDialog.Builder(LoginActivity.this)
@@ -141,6 +154,7 @@ public class LoginActivity extends Activity {
                     .setPositiveButton(R.string.login, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+
                             EditText account = (EditText)item.findViewById(R.id.login_account);
                             EditText password = (EditText)item.findViewById(R.id.login_password);
                             TextValidation textValidation = new TextValidation();
@@ -157,7 +171,7 @@ public class LoginActivity extends Activity {
                                 return;
                             }
 
-                            ParseFunction.login(account.getText().toString(),password.getText().toString());
+                            ParseFunction.login(account.getText().toString(), password.getText().toString(),LoginActivity.this);
                         }
                     })
                     .show();

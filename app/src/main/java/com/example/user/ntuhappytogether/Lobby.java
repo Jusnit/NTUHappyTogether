@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,10 +12,15 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import com.parse.ParseUser;
+
+import ParseUtil.ParseFunction;
+
 public class Lobby extends Activity {
 
     private ImageView createEventView;
     private ImageView joinEventView;
+    private static final String tag ="Lobby";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +28,10 @@ public class Lobby extends Activity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_lobby);
+        Log.i(tag, "userID:" + ParseUser.getCurrentUser().getObjectId());
+        //ParseFunction.createEvent("ha2", "come", 2, ParseUser.getCurrentUser().getObjectId());
+        ParseFunction.cancelEvent(ParseUser.getCurrentUser().getObjectId(), "RaCN5tRjEA");
+
         setWidget();
     }
 

@@ -13,12 +13,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/direct_enter"
-            android:layout_centerVertical="true"
+            android:id="@+id/logoutText"
             android:textSize="@dimen/lobby_label_size"
             android:layout_centerHorizontal="true"
-
-            android:text="直接進入"
+            android:layout_marginTop="@dimen/logout_margin_top"
+            android:text="登出"
             />
 
 
@@ -27,19 +26,18 @@
             android:layout_height="wrap_content"
             android:text="註冊"
             android:id="@+id/registerText"
-
-            android:layout_alignLeft="@+id/direct_enter"
-            android:layout_alignStart="@+id/direct_enter"
+            android:layout_marginTop="@dimen/register_margin_top"
+            android:layout_centerHorizontal="true"
             android:textSize="@dimen/lobby_label_size" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/login_margin_top"
             android:text="登入"
+            android:textSize="@dimen/lobby_label_size"
             android:id="@+id/login_text"
-
-            android:layout_toRightOf="@+id/direct_enter"
-            android:layout_toEndOf="@+id/direct_enter" />
+            android:layout_centerHorizontal="true" />
 
     </RelativeLayout>
 </RelativeLayout>

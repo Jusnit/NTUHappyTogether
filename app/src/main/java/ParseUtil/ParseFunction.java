@@ -1,7 +1,11 @@
 package ParseUtil;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.example.user.ntuhappytogether.Lobby;
 import com.parse.FunctionCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseCloud;
@@ -15,17 +19,20 @@ import com.parse.SignUpCallback;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import loginregister.LoginActivity;
+
 /**
  * Created by user on 2016/1/1.
  */
 public class ParseFunction {
     private static final String tag = "ParseFunction";
 
-    public static void createEvent(String title,String context,int limit){
+    public static void createEvent(String title,String context,int limit,String userId){
         HashMap<String,Object> create = new HashMap();
         create.put("title",title);
         create.put("context", context);
         create.put("limit", limit);
+        create.put("userId", userId);
         ParseCloud.callFunctionInBackground("create", create, new FunctionCallback<String>() {
             public void done(String result, ParseException e) {
                 if (e == null) {
@@ -33,6 +40,20 @@ public class ParseFunction {
                 }
                 else
                     Log.i(tag, "create Exception:"+e.getMessage());
+            }
+        });
+    }
+
+    public static void cancelEvent(String userId,String eventId){
+        HashMap<String,String> cancelMap = new HashMap();
+        cancelMap.put("userId",userId);
+        cancelMap.put("eventId",eventId);
+        ParseCloud.callFunctionInBackground("cancel", cancelMap, new FunctionCallback<String>() {
+            public void done(String result, ParseException e) {
+                if (e == null) {
+                    Log.i(tag, "cancel:" + result);
+                } else
+                    Log.i(tag, "cancel Exception:" + e.getMessage());
             }
         });
     }
@@ -129,7 +150,7 @@ public class ParseFunction {
         user.setUsername(name);
         user.setPassword(password);
         user.setEmail(email);
-        user.put("InstallationId", ParseInstallation.getCurrentInstallation());
+        user.put("InstallationId", ParseInstallation.getCurrentInstallation().getObjectId());
         user.signUpInBackground(new SignUpCallback() {
             public void done(ParseException e) {
                 if (e == null) {
@@ -143,17 +164,22 @@ public class ParseFunction {
         });
     }
 
-    public static void login(String name, String password) {
+    public static void login(String name, String password,final Activity activity) {
+        Log.i(tag, "登入名:"+name+",密碼:"+password);
         ParseUser.logInInBackground(name, password, new LogInCallback() {
             public void done(ParseUser user, ParseException e) {
                 if (user != null) {
-                    user.put("InstallationId", ParseInstallation.getCurrentInstallation());
+                    user.put("InstallationId", ParseInstallation.getCurrentInstallation().getObjectId());
                     user.saveInBackground();
                     // Hooray! The user is logged in.
                     Log.i(tag, "login:" + "login success");
+                    activity.startActivity(new Intent().setClass(activity, Lobby.class));
+                    Log.i(tag, "user login後切換畫面");
 
                 } else {
                     Log.i(tag, "login:" + e.toString());
+                    Toast t1 = Toast.makeText(activity, "帳號或密碼錯誤!", Toast.LENGTH_SHORT);
+                    t1.show();
                 }
             }
         });
