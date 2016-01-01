@@ -28,6 +28,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import ParseUtil.ParseFunction;
+
 public class LoginActivity extends Activity {
 
     private TextView directEnter;
@@ -44,14 +46,23 @@ public class LoginActivity extends Activity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
         HashMap<String,String> query = new HashMap();
-        query.put("title", "食飯");
-//        ParseCloud.callFunctionInBackground("query", query, new FunctionCallback<ArrayList<ParseObject>>() {
+        ParseFunction.createEvent("衝浪","快來參加",5);
+//===========
+//        HashMap<String,String> querytitle = new HashMap();
+//        querytitle.put("title", "食飯");
+//        ParseCloud.callFunctionInBackground("query_title", querytitle, new FunctionCallback<ArrayList<ParseObject>>() {
 //            public void done(ArrayList<ParseObject> result, ParseException e) {
 //                if (e == null) {
 //                    try {
+//                        Log.i(tag, "result.size()=" + result.size());
 //                        //JSONObject jsonObj = new JSONObject(result);
 //                        for (ParseObject temp : result) {
-//                            Log.i(tag, temp.getString("title"));
+//
+//                            ParseUser user = ParseUser.getCurrentUser();
+//                            ParseRelation<ParseObject> relation = temp.getRelation("participant");
+//                            relation.add(user);
+//                            temp.saveInBackground();
+//                            Log.i(tag, "title:" + temp.getString("title"));
 //                            //Log.i(tag,result.get("comment").toString());
 //                        }
 //
@@ -64,70 +75,42 @@ public class LoginActivity extends Activity {
 //                }
 //            }
 //        });
-//===========
-        HashMap<String,String> querytitle = new HashMap();
-        querytitle.put("title", "食飯");
-        ParseCloud.callFunctionInBackground("query_title", querytitle, new FunctionCallback<ArrayList<ParseObject>>() {
-            public void done(ArrayList<ParseObject> result, ParseException e) {
-                if (e == null) {
-                    try {
-                        Log.i(tag, "result.size()=" + result.size());
-                        //JSONObject jsonObj = new JSONObject(result);
-                        for (ParseObject temp : result) {
-
-                            ParseUser user = ParseUser.getCurrentUser();
-                            ParseRelation<ParseObject> relation = temp.getRelation("participant");
-                            relation.add(user);
-                            temp.saveInBackground();
-                            Log.i(tag, "title:" + temp.getString("title"));
-                            //Log.i(tag,result.get("comment").toString());
-                        }
-
-
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
-                    }
-                    Log.i(tag, result + ":hellofunction");
-
-                }
-            }
-        });
 //================
-        HashMap<String,String> joinMap = new HashMap();
-        joinMap.put("objectId","q7dcxdMi2D");
-        ParseUser user = ParseUser.getCurrentUser();
-//        joinMap.put("userId",user.getObjectId());
-//        ParseCloud.callFunctionInBackground("join", joinMap, new FunctionCallback<String>() {
+//        HashMap<String,String> joinMap = new HashMap();
+//        joinMap.put("objectId","q7dcxdMi2D");
+//        ParseUser user = ParseUser.getCurrentUser();
+////        joinMap.put("userId",user.getObjectId());
+////        ParseCloud.callFunctionInBackground("join", joinMap, new FunctionCallback<String>() {
+////            public void done(String result, ParseException e) {
+////                if (e == null) {
+////                    if(result == null){Log.i(tag,"result is null");}
+////                    else Log.i(tag,"Join:"+result);
+////
+////
+////
+////                    //Log.i(tag, result + ":hellofunction");
+////
+////                }else{
+////                    Log.i(tag, "join Exception:"+e.getMessage());
+////                }
+////            }
+////        });
+//        HashMap<String,String> exitMap = new HashMap();
+//        exitMap.put("objectId","q7dcxdMi2D");
+//        exitMap.put("userId",user.getObjectId());
+//        ParseCloud.callFunctionInBackground("exit", exitMap, new FunctionCallback<String>() {
 //            public void done(String result, ParseException e) {
 //                if (e == null) {
 //                    if(result == null){Log.i(tag,"result is null");}
-//                    else Log.i(tag,"Join:"+result);
+//                    else Log.i(tag,"Exit:"+result);
 //
 //
 //
 //                    //Log.i(tag, result + ":hellofunction");
 //
-//                }else{
-//                    Log.i(tag, "join Exception:"+e.getMessage());
 //                }
 //            }
 //        });
-        HashMap<String,String> exitMap = new HashMap();
-        exitMap.put("objectId","q7dcxdMi2D");
-        exitMap.put("userId",user.getObjectId());
-        ParseCloud.callFunctionInBackground("exit", exitMap, new FunctionCallback<String>() {
-            public void done(String result, ParseException e) {
-                if (e == null) {
-                    if(result == null){Log.i(tag,"result is null");}
-                    else Log.i(tag,"Exit:"+result);
-
-
-
-                    //Log.i(tag, result + ":hellofunction");
-
-                }
-            }
-        });
 //=========================
 
         //=======
