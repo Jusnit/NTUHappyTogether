@@ -6,6 +6,7 @@ import com.parse.FunctionCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
@@ -36,41 +37,54 @@ public class ParseFunction {
         });
     }
 
-    public static ArrayList<ParseObject> queryEvent(String title){
+    public  ArrayList<ParseObject> queryEvent(String title){
         HashMap<String,String> querytitle = new HashMap();
         querytitle.put("title", title);
         final ArrayList<ParseObject> parseObjList = new ArrayList();
-        ParseCloud.callFunctionInBackground("query_title", querytitle, new FunctionCallback<ArrayList<ParseObject>>() {
-            public void done(ArrayList<ParseObject> result, ParseException e) {
-                if (e == null) {
-                    try {
-                        parseObjList.addAll(result);
-                        Log.i(tag, "result.size()=" + result.size());
-                        //JSONObject jsonObj = new JSONObject(result);
-                        for (ParseObject temp : result) {
+        Flag flag = new Flag();
+        queryFunctionCallback qCallBack = new queryFunctionCallback(parseObjList,flag);
 
-                            ParseUser user = ParseUser.getCurrentUser();
-                            ParseRelation<ParseObject> relation = temp.getRelation("participant");
-                            relation.add(user);
-                            temp.saveInBackground();
-                            Log.i(tag, "title:" + temp.getString("title"));
-                            //Log.i(tag,result.get("comment").toString());
-                        }
-
-
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
+        ParseCloud.callFunctionInBackground("query_title", querytitle, qCallBack);
+        while(!flag.queryFinished){
+            //do nothing.
+        }
+        return parseObjList;
+    }
+    class Flag{
+        boolean queryFinished = false;
+    }
+    class queryFunctionCallback<T> implements FunctionCallback<T>{
+        private ArrayList<ParseObject> objList;
+        private Flag innerflag;
+        public queryFunctionCallback(ArrayList<ParseObject> objList,Flag flag){
+            this.objList = objList;
+            this.innerflag = flag;
+        }
+        public void done(T result, ParseException e) {
+            if (e == null) {
+                try {
+                    this.innerflag.queryFinished = true;
+                    objList.addAll((ArrayList<ParseObject>)result);
+                    Log.i(tag, "result.size()=" + ((ArrayList<ParseObject>)result).size());
+                    //JSONObject jsonObj = new JSONObject(result);
+                    for (ParseObject temp : (ArrayList<ParseObject>)result) {
+//                        ParseUser user = ParseUser.getCurrentUser();
+//                        ParseRelation<ParseObject> relation = temp.getRelation("participant");
+//                        relation.add(user);
+//                        temp.saveInBackground();
+                        Log.i(tag, "title:" + temp.getString("title"));
+                        //Log.i(tag,result.get("comment").toString());
                     }
-                    Log.i(tag, result + ":hellofunction");
 
-                }
-                else{
-                    Log.i(tag,"query Exception"+e.toString());
+
+                } catch (Exception e1) {
+                    e1.printStackTrace();
                 }
             }
-        });
-
-        return parseObjList;
+            else{
+                Log.i(tag,"query Exception"+e.toString());
+            }
+        }
     }
 
     public static void joinEvent (ParseUser user,String eventId) {
@@ -115,6 +129,7 @@ public class ParseFunction {
         user.setUsername(name);
         user.setPassword(password);
         user.setEmail(email);
+        user.put("InstallationId", ParseInstallation.getCurrentInstallation());
         user.signUpInBackground(new SignUpCallback() {
             public void done(ParseException e) {
                 if (e == null) {
@@ -132,13 +147,22 @@ public class ParseFunction {
         ParseUser.logInInBackground(name, password, new LogInCallback() {
             public void done(ParseUser user, ParseException e) {
                 if (user != null) {
+                    user.put("InstallationId", ParseInstallation.getCurrentInstallation());
+                    user.saveInBackground();
                     // Hooray! The user is logged in.
-                    Log.i(tag,"login:"+"login success");
+                    Log.i(tag, "login:" + "login success");
 
                 } else {
-                    Log.i(tag,"login:"+e.toString());
+                    Log.i(tag, "login:" + e.toString());
                 }
             }
         });
+    }
+
+    public static void logout(){
+        ParseUser user = ParseUser.getCurrentUser();
+        user.put("InstallationId", "None");
+        user.saveInBackground();
+        ParseUser.logOut();
     }
 }

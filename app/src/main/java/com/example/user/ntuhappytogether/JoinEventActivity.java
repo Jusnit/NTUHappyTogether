@@ -20,6 +20,8 @@ import com.parse.ParseObject;
 
 import java.util.ArrayList;
 
+import ParseUtil.ParseFunction;
+
 public class JoinEventActivity extends Activity {
     public static final String tag = "JoinEventActivity";
 
@@ -69,20 +71,60 @@ public class JoinEventActivity extends Activity {
     private class OnSearchingListener implements View.OnClickListener{
         @Override
         public void onClick(View v){
-            Log.i(tag,"onclick");
-            String key_word= keyWord.getText().toString();
+            Log.i(tag, "onclick");
+            final String  key_word= keyWord.getText().toString();
             if(key_word == null)  return;
-            ArrayList<ParseObject> parseObjList = StarterApplication.getEventByKeyWord(key_word);
-            String[] values = new String[parseObjList.size()];
-            int count = 0;
-            for(ParseObject temp : parseObjList){
-                Log.i(tag,"parseObj is not null");
-                values[count++] = temp.getString("title");
-            }
-            ListAdapter adapter = new ArrayAdapter<String>(JoinEventActivity.this, android.R.layout.simple_list_item_checked ,values);
-            eventList.setAdapter(adapter);
+            boolean flag = false;
+//            Runnable runnable = new Runnable() {
+//                @Override
+//                public void run() {
+//                    ParseFunction parseFun = new ParseFunction();
+//                    ArrayList<ParseObject> parseObjList = parseFun.queryEvent(key_word,flag);
+//                    String[] values = new String[parseObjList.size()];
+//                    int count = 0;
+//                    for(ParseObject temp : parseObjList){
+//                        Log.i(tag,"parseObj is not null");
+//                        values[count++] = temp.getString("title");
+//                    }
+//                    ListAdapter adapter = new ArrayAdapter<String>(JoinEventActivity.this, android.R.layout.simple_list_item_checked ,values);
+//                    eventList.setAdapter(adapter);
+//                }
+//            };
+            new Thread((new queryRunnable(key_word,flag))).start();
+
 
         }
     }
+
+    class queryRunnable implements Runnable{
+        private String keyword;
+//        private ParseFunction.Flag flag;
+        queryRunnable(String keyword,boolean flag){
+            this.keyword = keyword;
+//            this.flag = flag;
+        }
+        @Override
+        public void run() {
+            ParseFunction parseFun = new ParseFunction();
+            final ArrayList<ParseObject> parseObjList = parseFun.queryEvent(this.keyword);
+//            String[] values = new String[parseObjList.size()];
+//            int count = 0;
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    String[] values = new String[parseObjList.size()];
+                    int count = 0;
+                    for(ParseObject temp : parseObjList){
+                        Log.i(tag,"parseObj is not null");
+                        values[count++] = temp.getString("title");
+                    }
+                    ListAdapter adapter = new ArrayAdapter<String>(JoinEventActivity.this, android.R.layout.simple_list_item_checked, values);
+                    eventList.setAdapter(adapter);
+                }
+            });
+
+        }
+    };
 
 }
