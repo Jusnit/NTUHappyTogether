@@ -34,8 +34,7 @@ public class Lobby extends Activity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_lobby);
-        Log.i(tag, "userID:" + ParseUser.getCurrentUser().getObjectId());
-       // ParseFunction.modifyEvent(ParseUser.getCurrentUser().getObjectId(),"jfclXvoCvr","new!!");
+        ParseFunction.exitEvent(ParseUser.getCurrentUser().getObjectId(), "lk4LeiWUWP");
 
         setWidget();
     }

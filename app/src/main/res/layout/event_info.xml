@@ -18,15 +18,17 @@
             android:layout_weight="1"
             android:layout_height="match_parent"
             android:text="活動名稱:"
+            android:textSize="@dimen/eventinfo_text_size"
             android:gravity="center"
+
 
              />
         <TextView
             android:layout_width="0dp"
             android:layout_weight="2"
             android:layout_height="match_parent"
-
-
+            android:gravity="center"
+            android:textSize="@dimen/eventinfo_text_size"
             android:id="@+id/event_discribe" />
     </LinearLayout>
 
@@ -40,6 +42,7 @@
             android:layout_weight="1"
             android:layout_height="match_parent"
             android:text="需求人數:"
+            android:textSize="@dimen/eventinfo_text_size"
             android:gravity="center"
 
             />
@@ -47,7 +50,8 @@
             android:layout_width="0dp"
             android:layout_weight="2"
             android:layout_height="match_parent"
-
+            android:gravity="center"
+            android:textSize="@dimen/eventinfo_text_size"
             android:id="@+id/limit_describe" />
     </LinearLayout>
 
@@ -61,6 +65,7 @@
             android:layout_weight="1"
             android:layout_height="match_parent"
             android:text="活動類型:"
+            android:textSize="@dimen/eventinfo_text_size"
             android:gravity="center"
             />
 
@@ -68,7 +73,8 @@
             android:layout_width="0dp"
             android:layout_weight="2"
             android:layout_height="match_parent"
-            android:id="@+id/eventtype_describe"></TextView>
+            android:id="@+id/eventtype_describe"
+            android:gravity="center"></TextView>
 
     </LinearLayout>
 
@@ -88,7 +94,10 @@
             android:layout_width="match_parent"
             android:layout_weight="8"
             android:layout_height="0dp"
+            android:gravity="center"
             android:id="@+id/eventdetail"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
 
             />
 

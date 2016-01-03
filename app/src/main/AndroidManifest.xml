@@ -73,7 +73,8 @@
         </activity>
         <activity
             android:name=".EventController"
-            android:label="@string/title_activity_event_controller" >
+            android:label="@string/title_activity_event_controller"
+            android:screenOrientation="portrait" >
         </activity>
     </application>
 

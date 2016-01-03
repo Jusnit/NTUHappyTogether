@@ -7,11 +7,13 @@ import android.widget.Toast;
 
 import com.example.user.ntuhappytogether.Lobby;
 import com.parse.FunctionCallback;
+import com.parse.GetCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
@@ -142,10 +144,10 @@ public class ParseFunction {
         });
     }
 
-    public static void exitEvent(ParseUser user,String eventId) {
+    public static void exitEvent(String userId,String eventId) {
         HashMap<String, String> exitMap = new HashMap();
-        exitMap.put("objectId", eventId);
-        exitMap.put("userId", user.getObjectId());
+        exitMap.put("eventId", eventId);
+        exitMap.put("userId", userId);
         ParseCloud.callFunctionInBackground("exit", exitMap, new FunctionCallback<String>() {
             public void done(String result, ParseException e) {
                 if (e == null) {
@@ -180,7 +182,7 @@ public class ParseFunction {
     }
 
     public static void login(String name, String password,final Activity activity) {
-        Log.i(tag, "登入名:"+name+",密碼:"+password);
+        Log.i(tag, "登入名:" + name + ",密碼:" + password);
         ParseUser.logInInBackground(name, password, new LogInCallback() {
             public void done(ParseUser user, ParseException e) {
                 if (user != null) {
@@ -206,4 +208,42 @@ public class ParseFunction {
         user.saveInBackground();
         ParseUser.logOut();
     }
+
+    public  ArrayList<ParseObject> getAlreadyJoinEvent(){
+        final ArrayList<ParseObject> parseObjList = new ArrayList();
+        Flag flag = new Flag();
+        AlreadyJoinFunctionCallback<ParseUser> aCallBack = new AlreadyJoinFunctionCallback(parseObjList,flag);
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.getInBackground(ParseUser.getCurrentUser().getObjectId(), aCallBack);
+        while(!flag.queryFinished){
+            //do nothing.
+        }
+        return parseObjList;
+    }
+    class AlreadyJoinFunctionCallback<T extends ParseObject> implements GetCallback<T>{
+        private ArrayList<ParseObject> objList;
+        private Flag innerflag;
+        public AlreadyJoinFunctionCallback(ArrayList<ParseObject> objList,Flag flag){
+            this.objList = objList;
+            this.innerflag = flag;
+        }
+        public void done(T result, ParseException e) {
+            if (e == null) {
+                try {
+                    this.innerflag.queryFinished = true;
+                    ParseRelation<ParseObject> relation = (result).getRelation("joinEvent");
+                    objList.addAll(relation.getQuery().find());
+                    Log.i(tag, "My joinEvent size=" + (relation.getQuery().find().size()));
+
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            }
+            else{
+                Log.i(tag,"query Exception"+e.toString());
+            }
+        }
+    }
+
+
 }

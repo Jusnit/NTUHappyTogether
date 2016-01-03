@@ -2,6 +2,7 @@ package fragment;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -114,61 +115,77 @@ public class SearchEvent extends Fragment{
 
 
     private class OnSearchingListener implements View.OnClickListener{
-        @Override
-        public void onClick(View v){
-            Log.i(tag, "onclick");
-            final String  key_word= keyWord.getText().toString();
-            if(key_word == null)  return;
-            boolean flag = false;
-            new Thread((new queryRunnable(key_word,flag))).start();
+            @Override
+            public void onClick(View v){
+                Log.i(tag, "onclick");
+                final String  key_word= keyWord.getText().toString();
+                if(key_word == null)  return;
+                boolean flag = false;
+                new Thread((new queryRunnable(key_word,flag))).start();
+            }
         }
-    }
 
 
-    class queryRunnable implements Runnable{
-        private String keyword;
-        queryRunnable(String keyword,boolean flag){
-            this.keyword = keyword;
-        }
-        @Override
-        public void run() {
-            ParseFunction parseFun = new ParseFunction();
-            eventObjList = parseFun.queryEvent(this.keyword);
+        class queryRunnable implements Runnable{
+            private String keyword;
+            ProgressDialog pd;
+            queryRunnable(String keyword,boolean flag){
+                this.keyword = keyword;
+            }
+            @Override
+            public void run() {
+                ParseFunction parseFun = new ParseFunction();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        pd = new ProgressDialog(getActivity());
+                        pd.setTitle("請稍後");
+                        pd.setMessage("擷取資料中...");
+                        pd.show();
+                    }
+                });
+                eventObjList = parseFun.queryEvent(this.keyword);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        pd.dismiss();
+                    }
+                });
 //            String[] values = new String[parseObjList.size()];
 //            int count = 0;
 
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    String[] values = new String[eventObjList.size()];
-                    int count = 0;
-                    for (ParseObject temp : eventObjList) {
-                        Log.i(tag, "parseObj is not null");
-                        values[count++] = temp.getString("title");
-                    }
-                    ListAdapter adapter = new ArrayAdapter<String>(getActivity(), R.layout.my_simple_listview, values);
-                    eventList.setAdapter(adapter);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String[] values = new String[eventObjList.size()];
+                        int count = 0;
+                        for (ParseObject temp : eventObjList) {
+                            Log.i(tag, "parseObj is not null");
+                            values[count++] = temp.getString("title");
+                        }
+                        ListAdapter adapter = new ArrayAdapter<String>(getActivity(), R.layout.my_simple_listview, values);
+                        eventList.setAdapter(adapter);
 
-                    eventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Log.i(tag,"position="+position);
-                            final View item = LayoutInflater.from(getActivity()).inflate(R.layout.event_info, null);
-                            final int pos = position;
-                            TextView event = (TextView)item.findViewById(R.id.event_discribe);
-                            TextView limit = (TextView)item.findViewById(R.id.limit_describe);
-                            TextView type = (TextView)item.findViewById(R.id.eventtype_describe);
-                            TextView eventDetail = (TextView)item.findViewById(R.id.eventdetail);
-                            event.setText(eventObjList.get(pos).getString("title"));
-                            limit.setText(""+eventObjList.get(pos).getNumber("limit"));
-                            //TODO: set type
-                            eventDetail.setText(eventObjList.get(pos).getString("context"));
-                            new AlertDialog.Builder(getActivity())
-                                    .setTitle(R.string.eventinfo)
-                                    .setView(item)
-                                    .setPositiveButton(R.string.join, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
+                        eventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                Log.i(tag,"position="+position);
+                                final View item = LayoutInflater.from(getActivity()).inflate(R.layout.event_info, null);
+                                final int pos = position;
+                                TextView event = (TextView)item.findViewById(R.id.event_discribe);
+                                TextView limit = (TextView)item.findViewById(R.id.limit_describe);
+                                TextView type = (TextView)item.findViewById(R.id.eventtype_describe);
+                                TextView eventDetail = (TextView)item.findViewById(R.id.eventdetail);
+                                event.setText(eventObjList.get(pos).getString("title"));
+                                limit.setText(""+eventObjList.get(pos).getNumber("limit"));
+                                //TODO: set type
+                                eventDetail.setText(eventObjList.get(pos).getString("context"));
+                                new AlertDialog.Builder(getActivity())
+                                        .setTitle(R.string.eventinfo)
+                                        .setView(item)
+                                        .setPositiveButton(R.string.join, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
 //                                            TextView event = (EditText)item.findViewById(R.id.event_discribe);
 //                                            TextView limit = (EditText)item.findViewById(R.id.limit_describe);
 //                                            TextView type = (EditText)item.findViewById(R.id.eventtype_describe);
@@ -177,19 +194,19 @@ public class SearchEvent extends Fragment{
 //                                            limit.setText(""+eventObjList.get(pos).getNumber("limit"));
 //                                            //TODO: set type
 //                                            eventDetail.setText(eventObjList.get(pos).getString("context"));
-                                            ParseFunction.joinEvent(ParseUser.getCurrentUser().getObjectId(),eventObjList.get(pos).getObjectId());
-                                            Log.i(tag, "UserId=" + ParseUser.getCurrentUser().getObjectId());
-                                            Log.i(tag, "eventId=" + eventObjList.get(pos).getObjectId());
+                                                ParseFunction.joinEvent(ParseUser.getCurrentUser().getObjectId(),eventObjList.get(pos).getObjectId());
+                                                Log.i(tag, "UserId=" + ParseUser.getCurrentUser().getObjectId());
+                                                Log.i(tag, "eventId=" + eventObjList.get(pos).getObjectId());
 
-                                        }
-                                    })
-                                    .show();
-                        }
-                    });
-                }
-            });
+                                            }
+                                        })
+                                        .show();
+                            }
+                        });
+                    }
+                });
 
-        }
+            }
     }
 
 
