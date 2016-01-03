@@ -68,7 +68,8 @@
         </activity>
         <activity
             android:name=".JoinEventActivity"
-            android:label="@string/title_activity_join_event" >
+            android:label="@string/title_activity_join_event"
+            android:screenOrientation="portrait" >
         </activity>
     </application>
 

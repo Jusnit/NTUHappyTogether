@@ -1,20 +1,26 @@
 package com.example.user.ntuhappytogether;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.parse.ParseUser;
 
 import ParseUtil.ParseFunction;
+import loginregister.TextValidation;
 
 public class Lobby extends Activity {
 
@@ -29,14 +35,58 @@ public class Lobby extends Activity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_lobby);
         Log.i(tag, "userID:" + ParseUser.getCurrentUser().getObjectId());
-        //ParseFunction.createEvent("ha2", "come", 2, ParseUser.getCurrentUser().getObjectId());
-        ParseFunction.cancelEvent(ParseUser.getCurrentUser().getObjectId(), "RaCN5tRjEA");
+       // ParseFunction.modifyEvent(ParseUser.getCurrentUser().getObjectId(),"jfclXvoCvr","new!!");
 
         setWidget();
     }
 
     private void setWidget(){
         createEventView = (ImageView)findViewById(R.id.create_event);
+        createEventView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final View item = LayoutInflater.from(Lobby.this).inflate(R.layout.create_event_dialog, null);
+
+                AlertDialog dialog = new AlertDialog.Builder(Lobby.this, R.style.FullHeightDialog)
+                        .setView(item)
+                        .setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                EditText title = (EditText) item.findViewById(R.id.create_title);
+                                EditText limit = (EditText) item.findViewById(R.id.create_limit);
+                                EditText context = (EditText) item.findViewById(R.id.context_edit);
+                                if (title.getText().toString() == null || title.getText().toString().length()<1) {
+                                    Toast t1 = Toast.makeText(Lobby.this, "請輸入活動名稱", Toast.LENGTH_SHORT);
+                                    t1.show();
+                                    return;
+                                }
+                                try {
+                                    if (limit.getText().toString() == null) {
+                                        Toast t1 = Toast.makeText(Lobby.this, "請輸入需求人數", Toast.LENGTH_SHORT);
+                                        t1.show();
+                                        return;
+                                    }
+                                }catch(Exception e){Toast t1 = Toast.makeText(Lobby.this, "需求人數須為數字", Toast.LENGTH_SHORT);
+                                    t1.show();
+                                    return;}
+                                if (context.getText().toString() == null) {
+                                    Toast t1 = Toast.makeText(Lobby.this, "請輸入活動敘述", Toast.LENGTH_SHORT);
+                                    t1.show();
+                                    return;
+                                }
+                                ParseFunction.createEvent(title.getText().toString(), context.getText().toString()
+                                        , Integer.valueOf(limit.getText().toString()), ParseUser.getCurrentUser().getObjectId());
+                            }
+                        })
+                        .show();
+//                dialog.dismiss();
+//                WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
+//                params.width = WindowManager.LayoutParams.MATCH_PARENT;
+//                params.height = WindowManager.LayoutParams.MATCH_PARENT ;
+//                dialog.getWindow().setAttributes(params);
+//                dialog.show();
+            }
+        });
         joinEventView = (ImageView)findViewById(R.id.join_event);
         joinEventView.setOnClickListener(new View.OnClickListener() {
             @Override

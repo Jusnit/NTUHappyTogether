@@ -58,6 +58,21 @@ public class ParseFunction {
         });
     }
 
+    public static void modifyEvent(String userId,String eventId,String newcontext){
+        HashMap<String,String> modifyMap = new HashMap();
+        modifyMap .put("userId", userId);
+        modifyMap .put("eventId", eventId);
+        modifyMap .put("newcontext", newcontext);
+        ParseCloud.callFunctionInBackground("modify", modifyMap , new FunctionCallback<String>() {
+            public void done(String result, ParseException e) {
+                if (e == null) {
+                    Log.i(tag, "Modify event:" + result);
+                } else
+                    Log.i(tag, "Modify Exception:" + e.getMessage());
+            }
+        });
+    }
+
     public  ArrayList<ParseObject> queryEvent(String title){
         HashMap<String,String> querytitle = new HashMap();
         querytitle.put("title", title);

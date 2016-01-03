@@ -1,7 +1,6 @@
 package com.example.user.ntuhappytogether;
 
 import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -9,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,7 +33,7 @@ public class JoinEventActivity extends Activity {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_join_event);
+        setContentView(R.layout.fragment_join);
         setWidget();
     }
 
@@ -119,7 +117,7 @@ public class JoinEventActivity extends Activity {
                         Log.i(tag,"parseObj is not null");
                         values[count++] = temp.getString("title");
                     }
-                    ListAdapter adapter = new ArrayAdapter<String>(JoinEventActivity.this, android.R.layout.simple_list_item_checked, values);
+                    ListAdapter adapter = new ArrayAdapter<String>(JoinEventActivity.this, android.R.layout.simple_list_item_1, values);
                     eventList.setAdapter(adapter);
                 }
             });

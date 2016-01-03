@@ -13,7 +13,10 @@
     <dimen name="hobby_pic_padding_right">30dp</dimen>
     <dimen name="hobby_pic_padding_left">30dp</dimen>
 
-    <dimen name="lobby_label_size">30dp</dimen>
+    <dimen name="login_text_size">30dp</dimen>
+    <dimen name="lobby_text_size">20dp</dimen>
+
+
 
     <dimen name="join_event_category_textsize">25dp</dimen>
 

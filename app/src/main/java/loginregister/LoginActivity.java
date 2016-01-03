@@ -27,6 +27,8 @@ import com.parse.SignUpCallback;
 import java.util.HashMap;
 
 import ParseUtil.ParseFunction;
+import account.AccountBuilder;
+import account.NormalAccountBuilder;
 
 public class LoginActivity extends Activity {
 
@@ -72,8 +74,8 @@ public class LoginActivity extends Activity {
         registerText = (TextView)findViewById(R.id.registerText);
         loginText = (TextView)findViewById(R.id.login_text);
         logoutText = (TextView)findViewById(R.id.logoutText);
-
-        registerText.setOnClickListener(new RegisterTextOnClickListener());
+        AccountBuilder builder = new NormalAccountBuilder();
+        registerText.setOnClickListener(new RegisterTextOnClickListener(builder));
         loginText.setOnClickListener(new LoginTextOnClickListener());
         logoutText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,6 +99,10 @@ public class LoginActivity extends Activity {
 //
 
     class RegisterTextOnClickListener implements View.OnClickListener{
+        private AccountBuilder builder;
+        RegisterTextOnClickListener(AccountBuilder builder){
+            this.builder = builder;
+        }
         @Override
         public void onClick(View v){
 
@@ -130,7 +136,9 @@ public class LoginActivity extends Activity {
                                 Log.i(tag, "Email格式錯誤!");
                                 return;
                             }
-                            ParseFunction.signUp(account.getText().toString(),password.getText().toString()
+//                            ParseFunction.signUp(account.getText().toString(),password.getText().toString()
+//                                    ,email.getText().toString());
+                            builder.buildAccount(account.getText().toString(),password.getText().toString()
                                     ,email.getText().toString());
                         }
                     })
