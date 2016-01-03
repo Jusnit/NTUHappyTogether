@@ -91,7 +91,7 @@ public class Lobby extends Activity {
         joinEventView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent().setClass(Lobby.this,JoinEventActivity.class));
+                startActivity(new Intent().setClass(Lobby.this,EventController.class));
 
             }
         });

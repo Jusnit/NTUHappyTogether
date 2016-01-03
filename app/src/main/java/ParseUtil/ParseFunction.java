@@ -123,10 +123,10 @@ public class ParseFunction {
         }
     }
 
-    public static void joinEvent (ParseUser user,String eventId) {
+    public static void joinEvent (String userId,String eventId) {
         HashMap<String, String> joinMap = new HashMap();
-        joinMap.put("objectId", eventId);
-        joinMap.put("userId",user.getObjectId());
+        joinMap.put("eventId", eventId);
+        joinMap.put("userId",userId);
         ParseCloud.callFunctionInBackground("join", joinMap, new FunctionCallback<String>() {
             public void done(String result, ParseException e) {
                 if (e == null) {
