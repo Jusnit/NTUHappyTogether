@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import fragment.AlreadyJoin;
@@ -28,9 +30,39 @@ public class EventController extends Activity implements MyEventFragment.OnFragm
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_event_controller);
+        searchFragment = new SearchEvent();
+        getFragmentManager().beginTransaction().replace(R.id.fragment_frame, searchFragment)
+                .commit();
+        clickSearch();
+
         setWidgets();
     }
 
+    private void clickSearch(){
+        RelativeLayout r = (RelativeLayout)findViewById(R.id.searchrelative);
+        r.setBackgroundColor(0xFF228A2D);
+        RelativeLayout r2= (RelativeLayout)findViewById(R.id.alreadyelative);
+        r2.setBackgroundColor(0xFF30D92D);
+        RelativeLayout r3= (RelativeLayout)findViewById(R.id.myeventrelative);
+        r3.setBackgroundColor(0xFF30D92D);
+
+    }
+    private void clickAlready(){
+        RelativeLayout r = (RelativeLayout)findViewById(R.id.alreadyelative);
+        r.setBackgroundColor(0xFF228A2D);
+        RelativeLayout r2 = (RelativeLayout)findViewById(R.id.searchrelative);
+        r2.setBackgroundColor(0xFF30D92D);
+        RelativeLayout r3 = (RelativeLayout)findViewById(R.id.myeventrelative);
+        r3.setBackgroundColor(0xFF30D92D);
+    }
+    private void clickMyEvent(){
+        RelativeLayout r = (RelativeLayout)findViewById(R.id.myeventrelative);
+        r.setBackgroundColor(0xFF228A2D);
+        RelativeLayout r2 = (RelativeLayout)findViewById(R.id.alreadyelative);
+        r2.setBackgroundColor(0xFF30D92D);
+        RelativeLayout r3 = (RelativeLayout)findViewById(R.id.searchrelative);
+        r3.setBackgroundColor(0xFF30D92D);
+    }
     private void setWidgets(){
         searchFragment = new SearchEvent();
         alreadyJoinFragment = new AlreadyJoin();
@@ -40,7 +72,7 @@ public class EventController extends Activity implements MyEventFragment.OnFragm
         searchEventTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                clickSearch();
                 getFragmentManager().beginTransaction().replace(R.id.fragment_frame, searchFragment)
                         .commit();
             }
@@ -49,6 +81,7 @@ public class EventController extends Activity implements MyEventFragment.OnFragm
         alreadyJoinTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                clickAlready();
                 getFragmentManager().beginTransaction().replace(R.id.fragment_frame, alreadyJoinFragment)
                         .commit();
             }
@@ -57,6 +90,7 @@ public class EventController extends Activity implements MyEventFragment.OnFragm
         myEventTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                clickMyEvent();
                 getFragmentManager().beginTransaction().replace(R.id.fragment_frame, myEventFragment)
                         .commit();
             }

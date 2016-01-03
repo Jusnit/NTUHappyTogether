@@ -16,39 +16,46 @@
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="#FF2BF329"
+            android:id="@+id/searchrelative">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="找活動"
                 android:id="@+id/serachevent_textview"
                 android:gravity="center"
-                />
+                android:textColor="#FFFFFF" />
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:id="@+id/alreadyelative"
+            android:background="#FF2BF329">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="已加入"
                 android:id="@+id/already_join_textivew"
                 android:gravity="center"
-                />
+                android:textColor="#FFFFFF" />
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:id="@+id/myeventrelative"
+            android:background="#FF2BF329">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="我的活動"
                 android:id="@+id/my_event_textview"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:textColor="#FFFFFF" />
         </RelativeLayout>
     </LinearLayout>
 
