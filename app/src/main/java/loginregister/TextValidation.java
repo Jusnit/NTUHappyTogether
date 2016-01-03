@@ -10,7 +10,7 @@ public class TextValidation {
 
     public boolean checkValidity(String nameOrPassword) {
 
-        final int MIN_LENGTH = 1;
+        final int MIN_LENGTH = 6;
         final int MAX_LENGTH = 15;
 
         if (nameOrPassword.length() < MIN_LENGTH || nameOrPassword.length() >= MAX_LENGTH)

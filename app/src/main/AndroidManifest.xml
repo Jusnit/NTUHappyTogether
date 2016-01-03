@@ -52,7 +52,7 @@
             android:value="@string/parse_client_key" />
 
         <activity
-            android:name=".LoginActivity"
+            android:name="loginregister.LoginActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -68,7 +68,8 @@
         </activity>
         <activity
             android:name=".JoinEventActivity"
-            android:label="@string/title_activity_join_event" >
+            android:label="@string/title_activity_join_event"
+            android:screenOrientation="portrait" >
         </activity>
     </application>
 

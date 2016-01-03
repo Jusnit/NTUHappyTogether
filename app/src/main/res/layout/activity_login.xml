@@ -8,53 +8,36 @@
         android:layout_height="match_parent"
         android:background="@drawable/garden">
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:text="Name"
-            android:ems="10"
-            android:id="@+id/account"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:ems="10"
-            android:id="@+id/password"
-            android:layout_below="@+id/account"
-            android:layout_alignRight="@+id/account"
-            android:layout_alignEnd="@+id/account"
-            android:layout_marginTop="62dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/direct_enter"
-            android:layout_centerVertical="true"
-            android:textSize="@dimen/lobby_label_size"
+            android:id="@+id/logoutText"
+            android:textSize="@dimen/login_text_size"
             android:layout_centerHorizontal="true"
-
-            android:text="直接進入"
+            android:layout_marginTop="@dimen/logout_margin_top"
+            android:text="登出"
             />
 
-        <Button
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="註冊"
-            android:id="@+id/register"
-            android:layout_above="@+id/direct_enter"
-            android:layout_centerHorizontal="true" />
+            android:id="@+id/registerText"
+            android:layout_marginTop="@dimen/register_margin_top"
+            android:layout_centerHorizontal="true"
+            android:textSize="@dimen/login_text_size" />
 
-        <EditText
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:ems="10"
-            android:id="@+id/email"
-            android:layout_above="@+id/register"
+            android:layout_marginTop="@dimen/login_margin_top"
+            android:text="登入"
+            android:textSize="@dimen/login_text_size"
+            android:id="@+id/login_text"
             android:layout_centerHorizontal="true" />
+
     </RelativeLayout>
 </RelativeLayout>

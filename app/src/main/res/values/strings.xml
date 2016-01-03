@@ -7,4 +7,15 @@
     <string name="parse_app_id">Uhtbbo4I3d4Ab423vvjyztOmvGgn8IO7jFJC6sWu</string>
     <string name="parse_client_key">wfIxmz6rm34WrEbaXxiVLovNemlSqjmJq93sSd3M</string>
     <string name="title_activity_join_event">JoinEventActivity</string>
+    <string name="register">註冊</string>
+    <string name="login">登入</string>
+    <string name="sendregister">確認送出</string>
+    <string name="sendcreate">創建活動</string>
+    <string name="create">創建</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+
 </resources>
