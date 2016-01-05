@@ -1,14 +1,29 @@
 package fragment;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.user.ntuhappytogether.R;
+import com.parse.ParseObject;
+import com.parse.ParseUser;
+
+import java.util.ArrayList;
+
+import ParseUtil.ParseFunction;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +42,10 @@ public class MyEventFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    public static final String tag = "MyEvent";
+    private ArrayList<ParseObject> eventObjList;
+    private ListView my_event_listview;
 
     private OnFragmentInteractionListener mListener;
 
@@ -72,6 +91,89 @@ public class MyEventFragment extends Fragment {
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
+        }
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState){
+        super.onActivityCreated(savedInstanceState);
+        my_event_listview = (ListView)getActivity().findViewById(R.id.my_event_listview);
+        eventObjList = new ArrayList();
+        new Thread((new queryRunnable())).start();
+    }
+
+    class queryRunnable implements Runnable{
+        boolean queryOK = false;
+        ProgressDialog pd;
+        @Override
+        public void run() {
+            ParseFunction parseFun = new ParseFunction();
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    pd = new ProgressDialog(getActivity());
+                    pd.setTitle("請稍後");
+                    pd.setMessage("擷取資料中...");
+                    pd.show();
+                }
+            });
+            eventObjList = parseFun.getMyEvent();
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    pd.dismiss();
+                }
+            });
+//            String[] values = new String[parseObjList.size()];
+//            int count = 0;
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    String[] values = new String[eventObjList.size()];
+                    int count = 0;
+                    for (ParseObject temp : eventObjList) {
+                        Log.i(tag, "parseObj is not null");
+                        values[count++] = temp.getString("title");
+                    }
+                    ListAdapter adapter = new ArrayAdapter<String>(getActivity(), R.layout.my_simple_listview, values);
+                    if(my_event_listview == null)
+                        my_event_listview = (ListView)getActivity().findViewById(R.id.my_event_listview);
+                    my_event_listview.setAdapter(adapter);
+
+                    my_event_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Log.i(tag,"position="+position);
+                            final View item = LayoutInflater.from(getActivity()).inflate(R.layout.event_info, null);
+                            final int pos = position;
+                            TextView event = (TextView)item.findViewById(R.id.event_discribe);
+                            TextView limit = (TextView)item.findViewById(R.id.limit_describe);
+                            TextView type = (TextView)item.findViewById(R.id.eventtype_describe);
+                            TextView eventDetail = (TextView)item.findViewById(R.id.eventdetail);
+                            event.setText(eventObjList.get(pos).getString("title"));
+                            limit.setText(""+eventObjList.get(pos).getNumber("limit"));
+                            //TODO: set type
+                            eventDetail.setText(eventObjList.get(pos).getString("context"));
+                            new AlertDialog.Builder(getActivity())
+                                    .setTitle(R.string.eventinfo)
+                                    .setView(item)
+                                    .setPositiveButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+//
+                                            ParseFunction.cancelEvent(ParseUser.getCurrentUser().getObjectId(),eventObjList.get(pos).getObjectId());
+                                            Log.i(tag, "UserId=" + ParseUser.getCurrentUser().getObjectId());
+                                            Log.i(tag, "CanceleventId=" + eventObjList.get(pos).getObjectId());
+
+                                        }
+                                    })
+                                    .show();
+                        }
+                    });
+                }
+            });
+
         }
     }
 

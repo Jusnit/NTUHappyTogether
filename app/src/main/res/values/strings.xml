@@ -15,6 +15,10 @@
     <string name="eventinfo">活動資訊</string>
     <string name="join">加入</string>
     <string name="exit">離開活動</string>
+    <string name="cancel">取消活動</string>
+    <string name="choosedate">選擇日期</string>
+
+
 
 
 

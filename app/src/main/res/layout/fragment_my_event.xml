@@ -5,5 +5,9 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/my_event_listview" />
+        android:id="@+id/my_event_listview"
+        android:visibility="visible"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal"
+        android:clickable="true"/>
 </RelativeLayout>

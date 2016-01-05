@@ -10,8 +10,8 @@
 
     <dimen name="hobby_pic_padding_top">70dp</dimen>
     <dimen name="hobby_pic_padding_bottom">70dp</dimen>
-    <dimen name="hobby_pic_padding_right">30dp</dimen>
-    <dimen name="hobby_pic_padding_left">30dp</dimen>
+    <dimen name="hobby_pic_padding_right">20dp</dimen>
+    <dimen name="hobby_pic_padding_left">20dp</dimen>
 
     <dimen name="login_text_size">30dp</dimen>
     <dimen name="lobby_text_size">20dp</dimen>

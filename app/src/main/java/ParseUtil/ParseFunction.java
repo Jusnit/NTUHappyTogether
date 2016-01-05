@@ -245,5 +245,41 @@ public class ParseFunction {
         }
     }
 
+    public  ArrayList<ParseObject> getMyEvent(){
+        final ArrayList<ParseObject> parseObjList = new ArrayList();
+        Flag flag = new Flag();
+        MyEventFunctionCallback<ParseUser> mCallBack = new MyEventFunctionCallback(parseObjList,flag);
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.getInBackground(ParseUser.getCurrentUser().getObjectId(), mCallBack);
+        while(!flag.queryFinished){
+            //do nothing.
+        }
+        return parseObjList;
+    }
+    class MyEventFunctionCallback<T extends ParseObject> implements GetCallback<T>{
+        private ArrayList<ParseObject> objList;
+        private Flag innerflag;
+        public MyEventFunctionCallback(ArrayList<ParseObject> objList,Flag flag){
+            this.objList = objList;
+            this.innerflag = flag;
+        }
+        public void done(T result, ParseException e) {
+            if (e == null) {
+                try {
+                    this.innerflag.queryFinished = true;
+                    ParseRelation<ParseObject> relation = (result).getRelation("hostEvent");
+                    objList.addAll(relation.getQuery().find());
+                    Log.i(tag, "hostEvent size=" + (relation.getQuery().find().size()));
+
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            }
+            else{
+                Log.i(tag,"hostEventQuery Exception"+e.toString());
+            }
+        }
+    }
+
 
 }
