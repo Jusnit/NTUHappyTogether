@@ -29,12 +29,13 @@ import loginregister.LoginActivity;
 public class ParseFunction {
     private static final String tag = "ParseFunction";
 
-    public static void createEvent(String title,String context,int limit,String userId){
+    public static void createEvent(String title,String context,int limit,String userId,String time){
         HashMap<String,Object> create = new HashMap();
         create.put("title",title);
         create.put("context", context);
         create.put("limit", limit);
         create.put("userId", userId);
+        create.put("time",time);
         ParseCloud.callFunctionInBackground("create", create, new FunctionCallback<String>() {
             public void done(String result, ParseException e) {
                 if (e == null) {
@@ -212,15 +213,20 @@ public class ParseFunction {
     public  ArrayList<ParseObject> getAlreadyJoinEvent(){
         final ArrayList<ParseObject> parseObjList = new ArrayList();
         Flag flag = new Flag();
+
         AlreadyJoinFunctionCallback<ParseUser> aCallBack = new AlreadyJoinFunctionCallback(parseObjList,flag);
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.getInBackground(ParseUser.getCurrentUser().getObjectId(), aCallBack);
+//        ParseQuery<ParseUser> query = ParseUser.getQuery();
+
+        //query.getInBackground(ParseUser.getCurrentUser().getObjectId(), aCallBack);
+        HashMap<String,String> joinMap = new HashMap();
+        joinMap.put("userId",ParseUser.getCurrentUser().getObjectId());
+        ParseCloud.callFunctionInBackground("query_join", joinMap, aCallBack);
         while(!flag.queryFinished){
             //do nothing.
         }
         return parseObjList;
     }
-    class AlreadyJoinFunctionCallback<T extends ParseObject> implements GetCallback<T>{
+    class AlreadyJoinFunctionCallback<T> implements FunctionCallback<T>{
         private ArrayList<ParseObject> objList;
         private Flag innerflag;
         public AlreadyJoinFunctionCallback(ArrayList<ParseObject> objList,Flag flag){
@@ -231,9 +237,9 @@ public class ParseFunction {
             if (e == null) {
                 try {
                     this.innerflag.queryFinished = true;
-                    ParseRelation<ParseObject> relation = (result).getRelation("joinEvent");
-                    objList.addAll(relation.getQuery().find());
-                    Log.i(tag, "My joinEvent size=" + (relation.getQuery().find().size()));
+                    //ParseRelation<ParseObject> relation = (result).getRelation("joinEvent");
+                    objList.addAll((ArrayList<ParseObject>)result);
+                    Log.i(tag, "My joinEvent size=" + ((ArrayList<ParseObject>) result).size());
 
                 } catch (Exception e1) {
                     e1.printStackTrace();
@@ -249,14 +255,17 @@ public class ParseFunction {
         final ArrayList<ParseObject> parseObjList = new ArrayList();
         Flag flag = new Flag();
         MyEventFunctionCallback<ParseUser> mCallBack = new MyEventFunctionCallback(parseObjList,flag);
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.getInBackground(ParseUser.getCurrentUser().getObjectId(), mCallBack);
+//        ParseQuery<ParseUser> query = ParseUser.getQuery();
+//        query.getInBackground(ParseUser.getCurrentUser().getObjectId(), mCallBack);
+        HashMap<String,String> hostMap = new HashMap();
+        hostMap.put("userId",ParseUser.getCurrentUser().getObjectId());
+        ParseCloud.callFunctionInBackground("query_host", hostMap, mCallBack);
         while(!flag.queryFinished){
             //do nothing.
         }
         return parseObjList;
     }
-    class MyEventFunctionCallback<T extends ParseObject> implements GetCallback<T>{
+    class MyEventFunctionCallback<T> implements FunctionCallback<T>{
         private ArrayList<ParseObject> objList;
         private Flag innerflag;
         public MyEventFunctionCallback(ArrayList<ParseObject> objList,Flag flag){
@@ -267,9 +276,9 @@ public class ParseFunction {
             if (e == null) {
                 try {
                     this.innerflag.queryFinished = true;
-                    ParseRelation<ParseObject> relation = (result).getRelation("hostEvent");
-                    objList.addAll(relation.getQuery().find());
-                    Log.i(tag, "hostEvent size=" + (relation.getQuery().find().size()));
+//                    ParseRelation<ParseObject> relation = (result).getRelation("hostEvent");
+                    objList.addAll((ArrayList<ParseObject>)result);
+                    Log.i(tag, "My hostEvent size=" + ((ArrayList<ParseObject>) result).size());
 
                 } catch (Exception e1) {
                     e1.printStackTrace();

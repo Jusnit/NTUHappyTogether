@@ -141,6 +141,8 @@ public class SearchEvent extends Fragment{
                         pd = new ProgressDialog(getActivity());
                         pd.setTitle("請稍後");
                         pd.setMessage("擷取資料中...");
+                        pd.setCancelable(false);
+                        pd.setCanceledOnTouchOutside(false);
                         pd.show();
                     }
                 });

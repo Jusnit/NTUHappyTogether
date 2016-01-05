@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -102,6 +103,87 @@ public class MyEventFragment extends Fragment {
         new Thread((new queryRunnable())).start();
     }
 
+    private void refresh(){
+        String[] values = new String[eventObjList.size()];
+        int count = 0;
+        for (ParseObject temp : eventObjList) {
+            Log.i(tag, "parseObj is not null");
+            values[count++] = temp.getString("title");
+        }
+        ListAdapter adapter = new ArrayAdapter<String>(getActivity(), R.layout.my_simple_listview, values);
+        if(my_event_listview == null)
+            my_event_listview = (ListView)getActivity().findViewById(R.id.my_event_listview);
+        my_event_listview.setAdapter(adapter);
+
+        my_event_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.i(tag,"position="+position);
+                final View item = LayoutInflater.from(getActivity()).inflate(R.layout.event_info, null);
+                final int pos = position;
+                TextView event = (TextView)item.findViewById(R.id.event_discribe);
+                TextView limit = (TextView)item.findViewById(R.id.limit_describe);
+                TextView type = (TextView)item.findViewById(R.id.eventtype_describe);
+                TextView eventDetail = (TextView)item.findViewById(R.id.eventdetail);
+                event.setText(eventObjList.get(pos).getString("title"));
+                limit.setText(""+eventObjList.get(pos).getNumber("limit"));
+                //TODO: set type
+                eventDetail.setText(eventObjList.get(pos).getString("context"));
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(R.string.eventinfo)
+                        .setView(item)
+                        .setNegativeButton(R.string.modify, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                final View item2 = LayoutInflater.from(getActivity()).inflate(R.layout.modify_dialog, null);
+                                new AlertDialog.Builder(getActivity())
+                                        .setTitle(R.string.eventinfo)
+                                        .setView(item2)
+                                        .setPositiveButton(R.string.modify, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                EditText text = (EditText) item2.findViewById(R.id.modify_context);
+                                                String newcontext = text.getText().toString();
+                                                ParseFunction.modifyEvent(ParseUser.getCurrentUser().getObjectId(), eventObjList.get(pos).getObjectId(), newcontext);
+                                                Log.i(tag, "UserId=" + ParseUser.getCurrentUser().getObjectId());
+                                                Log.i(tag, "ModifyeventId=" + eventObjList.get(pos).getObjectId());
+
+                                            }
+                                        })
+                                        .show();
+                                Log.i(tag, "UserId=" + ParseUser.getCurrentUser().getObjectId());
+                                Log.i(tag, "CanceleventId=" + eventObjList.get(pos).getObjectId());
+
+                            }
+                        })
+                        .setPositiveButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                new AlertDialog.Builder(getActivity())
+                                        .setTitle(R.string.warning)
+                                        .setMessage(R.string.ask_cancel)
+                                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                ParseFunction.cancelEvent(ParseUser.getCurrentUser().getObjectId(), eventObjList.get(pos).getObjectId());
+                                                eventObjList.remove(pos);
+                                                refresh();
+                                                Log.i(tag, "UserId=" + ParseUser.getCurrentUser().getObjectId());
+                                                Log.i(tag, "CanceleventId=" + eventObjList.get(pos).getObjectId());
+
+                                            }
+                                        })
+                                        .show();
+//                                            ParseFunction.cancelEvent(ParseUser.getCurrentUser().getObjectId(), eventObjList.get(pos).getObjectId());
+//                                            Log.i(tag, "UserId=" + ParseUser.getCurrentUser().getObjectId());
+//                                            Log.i(tag, "CanceleventId=" + eventObjList.get(pos).getObjectId());
+
+                            }
+                        })
+                        .show();
+            }
+        });
+    }
     class queryRunnable implements Runnable{
         boolean queryOK = false;
         ProgressDialog pd;
@@ -114,6 +196,8 @@ public class MyEventFragment extends Fragment {
                     pd = new ProgressDialog(getActivity());
                     pd.setTitle("請稍後");
                     pd.setMessage("擷取資料中...");
+                    pd.setCancelable(false);
+                    pd.setCanceledOnTouchOutside(false);
                     pd.show();
                 }
             });
@@ -130,47 +214,84 @@ public class MyEventFragment extends Fragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    String[] values = new String[eventObjList.size()];
-                    int count = 0;
-                    for (ParseObject temp : eventObjList) {
-                        Log.i(tag, "parseObj is not null");
-                        values[count++] = temp.getString("title");
-                    }
-                    ListAdapter adapter = new ArrayAdapter<String>(getActivity(), R.layout.my_simple_listview, values);
-                    if(my_event_listview == null)
-                        my_event_listview = (ListView)getActivity().findViewById(R.id.my_event_listview);
-                    my_event_listview.setAdapter(adapter);
-
-                    my_event_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Log.i(tag,"position="+position);
-                            final View item = LayoutInflater.from(getActivity()).inflate(R.layout.event_info, null);
-                            final int pos = position;
-                            TextView event = (TextView)item.findViewById(R.id.event_discribe);
-                            TextView limit = (TextView)item.findViewById(R.id.limit_describe);
-                            TextView type = (TextView)item.findViewById(R.id.eventtype_describe);
-                            TextView eventDetail = (TextView)item.findViewById(R.id.eventdetail);
-                            event.setText(eventObjList.get(pos).getString("title"));
-                            limit.setText(""+eventObjList.get(pos).getNumber("limit"));
-                            //TODO: set type
-                            eventDetail.setText(eventObjList.get(pos).getString("context"));
-                            new AlertDialog.Builder(getActivity())
-                                    .setTitle(R.string.eventinfo)
-                                    .setView(item)
-                                    .setPositiveButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
+                    refresh();
+//                    String[] values = new String[eventObjList.size()];
+//                    int count = 0;
+//                    for (ParseObject temp : eventObjList) {
+//                        Log.i(tag, "parseObj is not null");
+//                        values[count++] = temp.getString("title");
+//                    }
+//                    ListAdapter adapter = new ArrayAdapter<String>(getActivity(), R.layout.my_simple_listview, values);
+//                    if(my_event_listview == null)
+//                        my_event_listview = (ListView)getActivity().findViewById(R.id.my_event_listview);
+//                    my_event_listview.setAdapter(adapter);
 //
-                                            ParseFunction.cancelEvent(ParseUser.getCurrentUser().getObjectId(),eventObjList.get(pos).getObjectId());
-                                            Log.i(tag, "UserId=" + ParseUser.getCurrentUser().getObjectId());
-                                            Log.i(tag, "CanceleventId=" + eventObjList.get(pos).getObjectId());
-
-                                        }
-                                    })
-                                    .show();
-                        }
-                    });
+//                    my_event_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                        @Override
+//                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                            Log.i(tag,"position="+position);
+//                            final View item = LayoutInflater.from(getActivity()).inflate(R.layout.event_info, null);
+//                            final int pos = position;
+//                            TextView event = (TextView)item.findViewById(R.id.event_discribe);
+//                            TextView limit = (TextView)item.findViewById(R.id.limit_describe);
+//                            TextView type = (TextView)item.findViewById(R.id.eventtype_describe);
+//                            TextView eventDetail = (TextView)item.findViewById(R.id.eventdetail);
+//                            event.setText(eventObjList.get(pos).getString("title"));
+//                            limit.setText(""+eventObjList.get(pos).getNumber("limit"));
+//                            //TODO: set type
+//                            eventDetail.setText(eventObjList.get(pos).getString("context"));
+//                            new AlertDialog.Builder(getActivity())
+//                                    .setTitle(R.string.eventinfo)
+//                                    .setView(item)
+//                                    .setNegativeButton(R.string.modify, new DialogInterface.OnClickListener() {
+//                                        @Override
+//                                        public void onClick(DialogInterface dialog, int which) {
+//                                            final View item2 = LayoutInflater.from(getActivity()).inflate(R.layout.modify_dialog, null);
+//                                            new AlertDialog.Builder(getActivity())
+//                                                    .setTitle(R.string.eventinfo)
+//                                                    .setView(item2)
+//                                                    .setPositiveButton(R.string.modify, new DialogInterface.OnClickListener() {
+//                                                        @Override
+//                                                        public void onClick(DialogInterface dialog, int which) {
+//                                                            EditText text = (EditText) item2.findViewById(R.id.modify_context);
+//                                                            String newcontext = text.getText().toString();
+//                                                            ParseFunction.modifyEvent(ParseUser.getCurrentUser().getObjectId(), eventObjList.get(pos).getObjectId(), newcontext);
+//                                                            Log.i(tag, "UserId=" + ParseUser.getCurrentUser().getObjectId());
+//                                                            Log.i(tag, "ModifyeventId=" + eventObjList.get(pos).getObjectId());
+//
+//                                                        }
+//                                                    })
+//                                                    .show();
+//                                            Log.i(tag, "UserId=" + ParseUser.getCurrentUser().getObjectId());
+//                                            Log.i(tag, "CanceleventId=" + eventObjList.get(pos).getObjectId());
+//
+//                                        }
+//                                    })
+//                                    .setPositiveButton(R.string.cancel, new DialogInterface.OnClickListener() {
+//                                        @Override
+//                                        public void onClick(DialogInterface dialog, int which) {
+//                                            new AlertDialog.Builder(getActivity())
+//                                                    .setTitle(R.string.warning)
+//                                                    .setMessage(R.string.ask_cancel)
+//                                                    .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+//                                                        @Override
+//                                                        public void onClick(DialogInterface dialog, int which) {
+//                                                            ParseFunction.cancelEvent(ParseUser.getCurrentUser().getObjectId(), eventObjList.get(pos).getObjectId());
+//                                                            Log.i(tag, "UserId=" + ParseUser.getCurrentUser().getObjectId());
+//                                                            Log.i(tag, "CanceleventId=" + eventObjList.get(pos).getObjectId());
+//
+//                                                        }
+//                                                    })
+//                                                    .show();
+////                                            ParseFunction.cancelEvent(ParseUser.getCurrentUser().getObjectId(), eventObjList.get(pos).getObjectId());
+////                                            Log.i(tag, "UserId=" + ParseUser.getCurrentUser().getObjectId());
+////                                            Log.i(tag, "CanceleventId=" + eventObjList.get(pos).getObjectId());
+//
+//                                        }
+//                                    })
+//                                    .show();
+//                        }
+//                    });
                 }
             });
 
