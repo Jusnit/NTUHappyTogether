@@ -12,9 +12,29 @@
     <string name="sendregister">確認送出</string>
     <string name="sendcreate">創建活動</string>
     <string name="create">創建</string>
+    <string name="eventinfo">活動資訊</string>
+    <string name="join">加入</string>
+    <string name="exit">離開活動</string>
+    <string name="cancel">取消活動</string>
+    <string name="ask_cancel">確定要取消?</string>
+    <string name="confirm">確定</string>
 
-<!-- TODO: Remove or change this placeholder text -->
+
+    <string name="modify">修改活動資訊</string>
+    <string name="modify_context">輸入新的活動資訊:</string>
+    <string name="warning">警告!</string>
+
+
+    <string name="choosedate">選擇日期</string>
+
+
+
+
+
+
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_event_controller">EventController</string>
 
 
 

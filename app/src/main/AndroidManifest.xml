@@ -39,7 +39,7 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
-<!--                   IMPORTANT: Change "com.parse.starter" to match your app's package name. -->
+                <!-- IMPORTANT: Change "com.parse.starter" to match your app's package name. -->
                 <category android:name="com.example.user.ntuhappytogether" />
             </intent-filter>
         </receiver>
@@ -69,6 +69,11 @@
         <activity
             android:name=".JoinEventActivity"
             android:label="@string/title_activity_join_event"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".EventController"
+            android:label="@string/title_activity_event_controller"
             android:screenOrientation="portrait" >
         </activity>
     </application>
