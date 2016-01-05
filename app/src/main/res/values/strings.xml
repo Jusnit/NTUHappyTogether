@@ -18,6 +18,10 @@
     <string name="cancel">取消活動</string>
     <string name="ask_cancel">確定要取消?</string>
     <string name="confirm">確定</string>
+    <string name="waiting">等待開始</string>
+    <string name="finish">已經結束</string>
+
+
 
 
     <string name="modify">修改活動資訊</string>
