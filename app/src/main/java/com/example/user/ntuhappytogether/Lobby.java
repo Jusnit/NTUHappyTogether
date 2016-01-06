@@ -164,6 +164,7 @@ public class Lobby extends Activity {
 //                ArrayAdapter<String> adp5 = new ArrayAdapter<String>(Lobby.this,android.R.layout.simple_spinner_item,mins);
 //                adp5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 //                minspin.setAdapter(adp5);
+                final Spinner typeSpinner = (Spinner)item.findViewById(R.id.type_spinner);
                 if(item.getParent()!=null){((ViewGroup)item.getParent()).removeView(item);}
                 AlertDialog dialog = new AlertDialog.Builder(Lobby.this, R.style.FullHeightDialog)
                         .setView(item)
@@ -233,7 +234,7 @@ public class Lobby extends Activity {
                                         +":"+minspin.getSelectedItem().toString();
 
                                 ParseFunction.createEvent(title.getText().toString(), context.getText().toString()
-                                        , Integer.valueOf(limit.getText().toString()), ParseUser.getCurrentUser().getObjectId(),time);
+                                        , Integer.valueOf(limit.getText().toString()), ParseUser.getCurrentUser().getObjectId(),time,typeSpinner.getSelectedItem().toString());
 
                             }
                         })

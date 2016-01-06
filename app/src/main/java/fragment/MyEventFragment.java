@@ -125,6 +125,11 @@ public class MyEventFragment extends Fragment {
                 TextView limit = (TextView)item.findViewById(R.id.limit_describe);
                 TextView type = (TextView)item.findViewById(R.id.eventtype_describe);
                 TextView eventDetail = (TextView)item.findViewById(R.id.eventdetail);
+                TextView rate = (TextView)item.findViewById(R.id.host_score);
+                TextView current = (TextView)item.findViewById(R.id.currentPeople);
+
+                current.setText(""+eventObjList.get(pos).getNumber("counter"));
+                rate.setText(""+eventObjList.get(pos).getNumber("hostrate")+"讚");
                 event.setText(eventObjList.get(pos).getString("title"));
                 limit.setText(""+eventObjList.get(pos).getNumber("limit"));
                 //TODO: set type

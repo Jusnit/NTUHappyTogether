@@ -128,6 +128,11 @@ public class AlreadyJoin extends Fragment {
                 TextView event = (TextView) item.findViewById(R.id.event_discribe);
                 TextView limit = (TextView) item.findViewById(R.id.limit_describe);
                 TextView type = (TextView) item.findViewById(R.id.eventtype_describe);
+                TextView rate = (TextView)item.findViewById(R.id.host_score);
+                TextView current = (TextView)item.findViewById(R.id.currentPeople);
+
+                current.setText(""+eventObjList.get(pos).getNumber("counter"));
+                rate.setText(""+eventObjList.get(pos).getNumber("hostrate")+"讚");
                 TextView eventDetail = (TextView) item.findViewById(R.id.eventdetail);
                 event.setText(eventObjList.get(pos).getString("title"));
                 limit.setText("" + eventObjList.get(pos).getNumber("limit"));

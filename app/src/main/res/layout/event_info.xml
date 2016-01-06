@@ -15,7 +15,7 @@
 
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_weight="1.5"
             android:layout_height="match_parent"
             android:text="活動名稱:"
             android:textSize="@dimen/eventinfo_text_size"
@@ -39,7 +39,7 @@
         android:layout_weight="1">
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_weight="1.5"
             android:layout_height="match_parent"
             android:text="需求人數:"
             android:textSize="@dimen/eventinfo_text_size"
@@ -62,7 +62,7 @@
         android:layout_weight="1">
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_weight="1.5"
             android:layout_height="match_parent"
             android:text="活動類型:"
             android:textSize="@dimen/eventinfo_text_size"
@@ -74,7 +74,110 @@
             android:layout_weight="2"
             android:layout_height="match_parent"
             android:id="@+id/eventtype_describe"
+            android:textSize="@dimen/eventinfo_text_size"
             android:gravity="center"></TextView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1.5"
+            android:layout_height="match_parent"
+            android:text="現在人數:"
+            android:textSize="@dimen/eventinfo_text_size"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="match_parent"
+            android:id="@+id/currentPeople"
+            android:textSize="@dimen/eventinfo_text_size"
+            android:gravity="center"></TextView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1.5"
+            android:layout_height="match_parent"
+            android:text="主辦者:"
+            android:textSize="@dimen/eventinfo_text_size"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="match_parent"
+            android:id="@+id/hostname"
+            android:textSize="@dimen/eventinfo_text_size"
+            android:gravity="center"></TextView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1.5"
+            android:layout_height="match_parent"
+            android:text="參加名單:"
+            android:textSize="@dimen/eventinfo_text_size"
+            android:gravity="center"
+            />
+
+        <Spinner
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="match_parent"
+            android:id="@+id/join_spinner"
+            android:layout_gravity="center"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.5"
+            android:gravity="center"
+            android:text="主辦者評價:"
+            android:textSize="@dimen/eventinfo_text_size" />
+
+
+
+        <TextView
+            android:id="@+id/host_score"
+            android:layout_width="0dp"
+            android:layout_weight="1.5"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:gravity="center"
+            android:textSize="@dimen/eventinfo_text_size"></TextView>
+
+
+
 
     </LinearLayout>
 
@@ -85,8 +188,9 @@
         android:layout_weight="5">
         <TextView
             android:layout_width="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="1.5"
             android:layout_height="0dp"
+            android:textSize="@dimen/eventinfo_text_size"
             android:text="活動描述"
             android:gravity="center_horizontal"
             />
@@ -100,8 +204,6 @@
             android:paddingRight="20dp"
 
             />
-
-
 
     </LinearLayout>
 
