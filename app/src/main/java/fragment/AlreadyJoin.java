@@ -15,13 +15,17 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.user.ntuhappytogether.R;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ParseUtil.ParseFunction;
 
@@ -45,6 +49,7 @@ public class AlreadyJoin extends Fragment {
     public static final String tag = "AlreadyJoin";
     private ArrayList<ParseObject> eventObjList;
     private ArrayList<ParseObject> finishObjList;
+    private List<ParseObject> participantList;
     private ListView my_event_listview;
     private ListView finished_listview;
 
@@ -94,6 +99,7 @@ public class AlreadyJoin extends Fragment {
         my_event_listview = (ListView)getActivity().findViewById(R.id.already_join_listview);
         eventObjList = new ArrayList();
         finishObjList = new ArrayList();
+        participantList = new ArrayList();
         Log.i(tag,"AlreadyJoin's onActivityCreated.");
         new Thread((new queryRunnable())).start();
     }
@@ -130,6 +136,37 @@ public class AlreadyJoin extends Fragment {
                 TextView type = (TextView) item.findViewById(R.id.eventtype_describe);
                 TextView rate = (TextView)item.findViewById(R.id.host_score);
                 TextView current = (TextView)item.findViewById(R.id.currentPeople);
+                TextView hostname = (TextView)item.findViewById(R.id.hostname);
+                ParseRelation<ParseObject> relation = (eventObjList.get(pos)).getRelation("participant");
+                ParseObject outtemp  = ParseObject.create("class");
+                try {
+                    participantList = relation.getQuery().find();
+                    for(ParseObject innertemp : participantList){
+                        Log.i(tag,"Participant List:"+innertemp.getString("nickname"));
+                        if(innertemp.getObjectId().equals(eventObjList.get(pos).getString("host"))){
+                            hostname.setText(innertemp.getString("nickname"));
+                            outtemp = innertemp;
+                            break;
+
+                        }
+
+
+                    }
+
+
+                }catch(ParseException e){Log.i(tag,"relationQuery Problem:"+e.toString());}
+                //hostname.setText(outtemp.getString("name"));
+
+                participantList.remove(outtemp);
+                Spinner joinspinner = (Spinner)item.findViewById(R.id.join_spinner);
+                String[] values = new String[participantList.size()];
+                for(int i = 0;i < participantList.size(); i++){
+                    values[i] = participantList.get(i).getString("username");
+                }
+                ArrayAdapter<String> adp3 = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item,values);
+                adp3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                joinspinner.setAdapter(adp3);
+                type.setText(eventObjList.get(pos).getString("type"));
 
                 current.setText(""+eventObjList.get(pos).getNumber("counter"));
                 rate.setText(""+eventObjList.get(pos).getNumber("hostrate")+"讚");

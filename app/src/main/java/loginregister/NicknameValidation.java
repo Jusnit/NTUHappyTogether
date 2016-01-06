@@ -14,7 +14,7 @@ public class NicknameValidation implements TextValidation{
 
     @Override
     public boolean checkValidity(String nickname) {
-        final int MIN_LENGTH = 4;
+        final int MIN_LENGTH = 1;
         final int MAX_LENGTH = 8;
 
         if (nickname.length() < MIN_LENGTH || nickname.length() >= MAX_LENGTH) {

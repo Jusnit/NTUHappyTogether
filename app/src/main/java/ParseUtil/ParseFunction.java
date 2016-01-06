@@ -223,13 +223,19 @@ public class ParseFunction {
         ParseUser.logInInBackground(name, password, new LogInCallback() {
             public void done(ParseUser user, ParseException e) {
                 if (user != null) {
-                    user.put("InstallationId", ParseInstallation.getCurrentInstallation().getObjectId());
-                    user.saveInBackground();
-                    // Hooray! The user is logged in.
-                    Log.i(tag, "login:" + "login success");
-                    activity.startActivity(new Intent().setClass(activity, Lobby.class));
-                    Log.i(tag, "user login後切換畫面");
+                    if(!user.getBoolean("emailVerified")){
+                        Toast t1 = Toast.makeText(activity, "尚未經過信箱認證!\n請至信箱收認證信件", Toast.LENGTH_LONG);
+                        t1.show();
 
+                    }else {
+                        user.put("InstallationId", ParseInstallation.getCurrentInstallation().getObjectId());
+                        user.saveInBackground();
+                        // Hooray! The user is logged in.
+                        Log.i(tag, "login:" + "login success");
+                        if(user.getBoolean("emailVerified"))
+                            activity.startActivity(new Intent().setClass(activity, Lobby.class));
+                        Log.i(tag, "user login後切換畫面");
+                    }
                 } else {
                     Log.i(tag, "login:" + e.toString());
                     Toast t1 = Toast.makeText(activity, "帳號或密碼錯誤!", Toast.LENGTH_SHORT);

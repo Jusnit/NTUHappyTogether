@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.example.user.ntuhappytogether.EventController;
 import com.example.user.ntuhappytogether.Query;
 import com.example.user.ntuhappytogether.QueryByKeyWord;
+import com.example.user.ntuhappytogether.QueryByType;
 import com.example.user.ntuhappytogether.R;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -61,6 +62,8 @@ public class SearchEvent extends Fragment{
     private EditText keyWord;
     private ListView eventList;
     private Button searchingButton;
+
+    private TextView eat,sport,other;
 
     private ArrayList<ParseObject> eventObjList;
     private List<ParseObject> participantList;
@@ -116,6 +119,13 @@ public class SearchEvent extends Fragment{
 
     }
     private void setWidget(){
+        eat = (TextView)getActivity().findViewById(R.id.textView3);
+        sport = (TextView)getActivity().findViewById(R.id.textView4);
+        other = (TextView)getActivity().findViewById(R.id.textView5);
+        eat.setOnClickListener(new OnEatListener());
+        sport.setOnClickListener(new OnSportListener());
+        other.setOnClickListener(new OnOtherListener());
+
         keyWord = (EditText)getActivity().findViewById(R.id.keyword);
         eventList = (ListView)getActivity().findViewById(R.id.listView);
         searchingButton = (Button)getActivity().findViewById(R.id.searching_button);
@@ -134,6 +144,41 @@ public class SearchEvent extends Fragment{
                 new Thread((new queryRunnable(key_word,flag,new QueryByKeyWord(key_word)))).start();
             }
         }
+    private class OnEatListener implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v){
+            Log.i(tag, "onclick");
+//            final String  key_word= keyWord.getText().toString();
+            final String  key_word= ((TextView)v).getText().toString();
+            if(key_word == null)  return;
+            boolean flag = false;
+            new Thread((new queryRunnable(key_word,flag,new QueryByType(key_word)))).start();
+        }
+    }
+    private class OnSportListener implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v){
+            Log.i(tag, "onclick");
+//            final String  key_word= keyWord.getText().toString();
+            final String  key_word= ((TextView)v).getText().toString();
+            if(key_word == null)  return;
+            boolean flag = false;
+            new Thread((new queryRunnable(key_word,flag,new QueryByType(key_word)))).start();
+        }
+    }
+    private class OnOtherListener implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v){
+            Log.i(tag, "onclick");
+            final String  key_word= ((TextView)v).getText().toString();
+            if(key_word == null)  return;
+            boolean flag = false;
+            new Thread((new queryRunnable(key_word,flag,new QueryByType(key_word)))).start();
+        }
+    }
 
 
         class queryRunnable implements Runnable{
