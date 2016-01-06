@@ -168,8 +168,8 @@ public class MyEventFragment extends Fragment {
                                                 ParseFunction.cancelEvent(ParseUser.getCurrentUser().getObjectId(), eventObjList.get(pos).getObjectId());
                                                 eventObjList.remove(pos);
                                                 refresh();
-                                                Log.i(tag, "UserId=" + ParseUser.getCurrentUser().getObjectId());
-                                                Log.i(tag, "CanceleventId=" + eventObjList.get(pos).getObjectId());
+//                                                Log.i(tag, "UserId=" + ParseUser.getCurrentUser().getObjectId());
+//                                                Log.i(tag, "CanceleventId=" + eventObjList.get(pos).getObjectId());
 
                                             }
                                         })

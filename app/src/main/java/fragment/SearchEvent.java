@@ -163,6 +163,8 @@ public class SearchEvent extends Fragment{
                         int count = 0;
                         for (ParseObject temp : eventObjList) {
                             Log.i(tag, "parseObj is not null");
+                            Log.i(tag, "hostrate="+temp.getNumber("hostrate").toString());
+
                             values[count++] = temp.getString("title");
                         }
                         ListAdapter adapter = new ArrayAdapter<String>(getActivity(), R.layout.my_simple_listview, values);

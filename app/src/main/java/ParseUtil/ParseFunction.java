@@ -163,11 +163,32 @@ public class ParseFunction {
         });
     }
 
-    public static void signUp(String name,String password,String email){
+    public static void rateEvent(String userId,String eventId,int rate){
+        HashMap<String, Object> rateMap = new HashMap();
+        rateMap.put("eventId", eventId);
+        rateMap.put("userId", userId);
+        rateMap.put("rate",rate);
+        ParseCloud.callFunctionInBackground("rate", rateMap, new FunctionCallback<String>() {
+            public void done(String result, ParseException e) {
+                if (e == null) {
+                    if (result == null) {
+                        Log.i(tag, "rate null");
+                    } else
+                        Log.i(tag, "Ratecomplete");
+
+
+                }
+            }
+        });
+    }
+
+    public static void signUp(String name,String password,String email,String nickname){
         ParseUser user = new ParseUser();
         user.setUsername(name);
         user.setPassword(password);
         user.setEmail(email);
+        user.put("nickname",nickname);
+        user.put("hostrate",0);
         user.put("InstallationId", ParseInstallation.getCurrentInstallation().getObjectId());
         user.signUpInBackground(new SignUpCallback() {
             public void done(ParseException e) {

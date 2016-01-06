@@ -20,6 +20,13 @@
     <string name="confirm">確定</string>
     <string name="waiting">等待開始</string>
     <string name="finish">已經結束</string>
+    <string name="thankful">感謝參與本活動!</string>
+    <string name="thankfuldetail">祝您活動愉快!\n要給主辦人一個讚嗎?</string>
+    <string name="ok">好</string>
+    <string name="no">不，謝謝</string>
+
+
+
 
 
 
