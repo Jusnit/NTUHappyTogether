@@ -132,6 +132,7 @@ public class MyEventFragment extends Fragment {
                 TextView eventDetail = (TextView)item.findViewById(R.id.eventdetail);
                 TextView rate = (TextView)item.findViewById(R.id.host_score);
                 TextView current = (TextView)item.findViewById(R.id.currentPeople);
+                TextView starttime = (TextView)item.findViewById(R.id.start_time);
 
                 TextView hostname = (TextView)item.findViewById(R.id.hostname);
                 ParseRelation<ParseObject> relation = (eventObjList.get(pos)).getRelation("participant");
@@ -164,6 +165,8 @@ public class MyEventFragment extends Fragment {
                 adp3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 joinspinner.setAdapter(adp3);
                 type.setText(eventObjList.get(pos).getString("type"));
+
+                starttime.setText(eventObjList.get(pos).getString("time_str"));
 
                 current.setText(""+eventObjList.get(pos).getNumber("counter"));
                 rate.setText(""+eventObjList.get(pos).getNumber("hostrate")+"讚");

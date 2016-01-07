@@ -88,6 +88,30 @@
             android:layout_width="0dp"
             android:layout_weight="1.5"
             android:layout_height="match_parent"
+            android:text="開始時間:"
+            android:textSize="@dimen/eventinfo_text_size"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="match_parent"
+            android:id="@+id/start_time"
+            android:textSize="@dimen/eventinfo_text_size"
+            android:gravity="center"></TextView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1.5"
+            android:layout_height="match_parent"
             android:text="現在人數:"
             android:textSize="@dimen/eventinfo_text_size"
             android:gravity="center"

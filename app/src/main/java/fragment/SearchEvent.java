@@ -240,6 +240,7 @@ public class SearchEvent extends Fragment{
                                 TextView rate = (TextView)item.findViewById(R.id.host_score);
                                 TextView current = (TextView)item.findViewById(R.id.currentPeople);
                                 TextView hostname = (TextView)item.findViewById(R.id.hostname);
+                                TextView starttime = (TextView)item.findViewById(R.id.start_time);
 
                                 ParseRelation<ParseObject> relation = (eventObjList.get(pos)).getRelation("participant");
                                 ParseObject outtemp  = ParseObject.create("class");
@@ -270,6 +271,8 @@ public class SearchEvent extends Fragment{
                                 ArrayAdapter<String> adp3 = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item,values);
                                 adp3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                 joinspinner.setAdapter(adp3);
+
+                                starttime.setText(eventObjList.get(pos).getString("time_str"));
 
                                 type.setText(eventObjList.get(pos).getString("type"));
                                 current.setText(""+eventObjList.get(pos).getNumber("counter"));

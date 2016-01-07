@@ -137,6 +137,8 @@ public class AlreadyJoin extends Fragment {
                 TextView rate = (TextView)item.findViewById(R.id.host_score);
                 TextView current = (TextView)item.findViewById(R.id.currentPeople);
                 TextView hostname = (TextView)item.findViewById(R.id.hostname);
+                TextView starttime = (TextView)item.findViewById(R.id.start_time);
+
                 ParseRelation<ParseObject> relation = (eventObjList.get(pos)).getRelation("participant");
                 ParseObject outtemp  = ParseObject.create("class");
                 try {
@@ -167,6 +169,8 @@ public class AlreadyJoin extends Fragment {
                 adp3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 joinspinner.setAdapter(adp3);
                 type.setText(eventObjList.get(pos).getString("type"));
+
+                starttime.setText(eventObjList.get(pos).getString("time_str"));
 
                 current.setText(""+eventObjList.get(pos).getNumber("counter"));
                 rate.setText(""+eventObjList.get(pos).getNumber("hostrate")+"讚");
