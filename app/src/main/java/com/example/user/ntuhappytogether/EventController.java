@@ -13,6 +13,9 @@ import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.parse.ParseUser;
+
+import account.Account;
 import fragment.AlreadyJoin;
 import fragment.MyEventFragment;
 import fragment.SearchEvent;
@@ -22,6 +25,17 @@ public class EventController extends Activity implements MyEventFragment.OnFragm
 
     private TextView searchEventTV,alreadyJoinTV,myEventTV;
     private Fragment searchFragment,alreadyJoinFragment,myEventFragment;
+    private ModifyBehavior mb;
+    private Cancel cancel;
+    private Edit edit;
+    private Join join;
+    private Rate rate;
+    private Exit exit;
+    private HostMode hm;
+    private ParticipantMode pm;
+    private GuestMode gm;
+    private EventList eventList;
+
 
 
     @Override
@@ -34,8 +48,15 @@ public class EventController extends Activity implements MyEventFragment.OnFragm
         getFragmentManager().beginTransaction().replace(R.id.fragment_frame, searchFragment)
                 .commit();
         clickSearch();
-
+        cancel = new Cancel();
+        edit = new Edit();
+        join = new Join();
+        rate = new Rate();
+        exit = new Exit();
         setWidgets();
+        Event event = new Event(0,new Account(ParseUser.getCurrentUser().getObjectId(),"getPwd","getMail"));
+        Event[] earray = new Event[1];earray[0] = event;
+        eventList = new EventList(earray);
     }
 
     private void clickSearch(){
@@ -77,6 +98,9 @@ public class EventController extends Activity implements MyEventFragment.OnFragm
                         .commit();
             }
         });
+        gm = new GuestMode(searchEventTV);
+        pm = new ParticipantMode(searchEventTV);
+        hm = new HostMode(searchEventTV);
         alreadyJoinTV = (TextView)findViewById(R.id.already_join_textivew);
         alreadyJoinTV.setOnClickListener(new View.OnClickListener() {
             @Override

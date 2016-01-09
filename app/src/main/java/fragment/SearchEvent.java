@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -20,12 +19,10 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.user.ntuhappytogether.EventController;
 import com.example.user.ntuhappytogether.Query;
-import com.example.user.ntuhappytogether.QueryByKeyWord;
-import com.example.user.ntuhappytogether.QueryByType;
+import com.example.user.ntuhappytogether.EventQueryByTitle;
+import com.example.user.ntuhappytogether.EventQueryByType;
 import com.example.user.ntuhappytogether.R;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -36,7 +33,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ParseUtil.ParseFunction;
-import loginregister.TextValidation;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -141,7 +137,7 @@ public class SearchEvent extends Fragment{
                 final String  key_word= keyWord.getText().toString();
                 if(key_word == null)  return;
                 boolean flag = false;
-                new Thread((new queryRunnable(key_word,flag,new QueryByKeyWord(key_word)))).start();
+                new Thread((new queryRunnable(key_word,flag,new EventQueryByTitle(key_word)))).start();
             }
         }
     private class OnEatListener implements View.OnClickListener{
@@ -153,7 +149,7 @@ public class SearchEvent extends Fragment{
             final String  key_word= ((TextView)v).getText().toString();
             if(key_word == null)  return;
             boolean flag = false;
-            new Thread((new queryRunnable(key_word,flag,new QueryByType(key_word)))).start();
+            new Thread((new queryRunnable(key_word,flag,new EventQueryByType(key_word)))).start();
         }
     }
     private class OnSportListener implements View.OnClickListener{
@@ -165,7 +161,7 @@ public class SearchEvent extends Fragment{
             final String  key_word= ((TextView)v).getText().toString();
             if(key_word == null)  return;
             boolean flag = false;
-            new Thread((new queryRunnable(key_word,flag,new QueryByType(key_word)))).start();
+            new Thread((new queryRunnable(key_word,flag,new EventQueryByType(key_word)))).start();
         }
     }
     private class OnOtherListener implements View.OnClickListener{
@@ -176,7 +172,7 @@ public class SearchEvent extends Fragment{
             final String  key_word= ((TextView)v).getText().toString();
             if(key_word == null)  return;
             boolean flag = false;
-            new Thread((new queryRunnable(key_word,flag,new QueryByType(key_word)))).start();
+            new Thread((new queryRunnable(key_word,flag,new EventQueryByType(key_word)))).start();
         }
     }
 

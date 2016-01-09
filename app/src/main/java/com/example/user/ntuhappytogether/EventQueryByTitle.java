@@ -9,15 +9,14 @@ import ParseUtil.ParseFunction;
 /**
  * Created by user on 2016/1/6.
  */
-public class QueryByType implements Query{
-
+public class EventQueryByTitle implements Query{
     private String keyword;
-    public QueryByType(String keyword){
-        this.keyword = keyword;
+    public EventQueryByTitle(String keyword){
+    this.keyword = keyword;
     }
 
     @Override
     public ArrayList<ParseObject> query() {
-        return new ParseFunction().queryType(this.keyword);
+        return new ParseFunction().queryEvent(this.keyword);
     }
 }
