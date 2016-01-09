@@ -97,6 +97,11 @@ public class LoginActivity extends Activity {
 
     }
 //
+    private boolean checkInfo(String text,TextValidation textValidation){
+        if(!textValidation.checkValidity(text))
+            return false;
+        return true;
+    }
 
     class RegisterTextOnClickListener implements View.OnClickListener{
         private AccountBuilder builder;
@@ -116,30 +121,45 @@ public class LoginActivity extends Activity {
                             EditText account = (EditText)item.findViewById(R.id.account);
                             EditText password = (EditText)item.findViewById(R.id.password);
                             EditText email = (EditText)item.findViewById(R.id.email);
-                            TextValidation textValidation = new TextValidation();
+                            EditText nickname = (EditText)item.findViewById(R.id.nickname);
+
+                           // TextValidation textValidation = new TextValidation();
                             Log.i(tag,account.getText().toString());
                             Log.i(tag,password.getText().toString());
                             Log.i(tag,email.getText().toString());
-                            if(!textValidation.checkValidity(account.getText().toString())) {
-                                Toast t1 = Toast.makeText(LoginActivity.this, "帳號長度錯誤!", Toast.LENGTH_SHORT);
-                                t1.show();
+                            if(!checkInfo(account.getText().toString(), new AccountValidation(LoginActivity.this)))
                                 return;
-                            }
-                            if(!textValidation.checkValidity(password.getText().toString())) {
-                                Toast t1 = Toast.makeText(LoginActivity.this, "密碼長度錯誤!", Toast.LENGTH_SHORT);
-                                t1.show();
+                            if(!checkInfo(nickname.getText().toString(),new NicknameValidation(LoginActivity.this)))
                                 return;
-                            }
-                            if(!textValidation.isEmailValid(email.getText().toString())){
-                                Toast t1 = Toast.makeText(LoginActivity.this, "Email格式錯誤!\n請使用ntu信箱", Toast.LENGTH_SHORT);
-                                t1.show();
-                                Log.i(tag, "Email格式錯誤!");
+                            if(!checkInfo(password.getText().toString(),new PasswordValidation(LoginActivity.this)))
                                 return;
-                            }
+                            if(!checkInfo(email.getText().toString(),new EmailValidation(LoginActivity.this)))
+                                return;
+//                            if(!textValidation.checkValidity(account.getText().toString())) {
+//                                Toast t1 = Toast.makeText(LoginActivity.this, "帳號長度錯誤!", Toast.LENGTH_SHORT);
+//                                t1.show();
+//                                return;
+//                            }
+//                            if(!textValidation.checkValidity(nickname.getText().toString())) {
+//                                Toast t1 = Toast.makeText(LoginActivity.this, "暱稱輸入有誤!", Toast.LENGTH_SHORT);
+//                                t1.show();
+//                                return;
+//                            }
+//                            if(!textValidation.checkValidity(password.getText().toString())) {
+//                                Toast t1 = Toast.makeText(LoginActivity.this, "密碼長度錯誤!", Toast.LENGTH_SHORT);
+//                                t1.show();
+//                                return;
+//                            }
+//                            if(!textValidation.isEmailValid(email.getText().toString())){
+//                                Toast t1 = Toast.makeText(LoginActivity.this, "Email格式錯誤!\n請使用ntu信箱", Toast.LENGTH_SHORT);
+//                                t1.show();
+//                                Log.i(tag, "Email格式錯誤!");
+//                                return;
+//                            }
 //                            ParseFunction.signUp(account.getText().toString(),password.getText().toString()
 //                                    ,email.getText().toString());
                             builder.buildAccount(account.getText().toString(),password.getText().toString()
-                                    ,email.getText().toString());
+                                    ,email.getText().toString(),nickname.getText().toString());
                         }
                     })
                     .show();
@@ -165,19 +185,24 @@ public class LoginActivity extends Activity {
 
                             EditText account = (EditText)item.findViewById(R.id.login_account);
                             EditText password = (EditText)item.findViewById(R.id.login_password);
-                            TextValidation textValidation = new TextValidation();
+                            //TextValidation textValidation = new TextValidation();
                             Log.i(tag,account.getText().toString());
                             Log.i(tag,password.getText().toString());
-                            if(!textValidation.checkValidity(account.getText().toString())) {
-                                Toast t1 = Toast.makeText(LoginActivity.this, "帳號長度錯誤!", Toast.LENGTH_SHORT);
-                                t1.show();
+                            if(!checkInfo(account.getText().toString(), new AccountValidation(LoginActivity.this)))
                                 return;
-                            }
-                            if(!textValidation.checkValidity(password.getText().toString())) {
-                                Toast t1 = Toast.makeText(LoginActivity.this, "密碼長度錯誤!", Toast.LENGTH_SHORT);
-                                t1.show();
+                            if(!checkInfo(password.getText().toString(),new PasswordValidation(LoginActivity.this)))
                                 return;
-                            }
+
+//                            if(!textValidation.checkValidity(account.getText().toString())) {
+//                                Toast t1 = Toast.makeText(LoginActivity.this, "帳號長度錯誤!", Toast.LENGTH_SHORT);
+//                                t1.show();
+//                                return;
+//                            }
+//                            if(!textValidation.checkValidity(password.getText().toString())) {
+//                                Toast t1 = Toast.makeText(LoginActivity.this, "密碼長度錯誤!", Toast.LENGTH_SHORT);
+//                                t1.show();
+//                                return;
+//                            }
 
                             ParseFunction.login(account.getText().toString(), password.getText().toString(),LoginActivity.this);
                         }

@@ -42,11 +42,12 @@
                 android:background="#239657">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="吃飯"
                     android:layout_centerHorizontal="true"
                     android:textSize="@dimen/join_event_category_textsize"
+                    android:gravity="center"
                     android:id="@+id/textView3" />
             </RelativeLayout>
 
@@ -57,11 +58,12 @@
                 android:background="#3053ff">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:textSize="@dimen/join_event_category_textsize"
                     android:text="運動"
+                    android:gravity="center"
                     android:id="@+id/textView4" />
             </RelativeLayout>
 
@@ -72,11 +74,12 @@
                 android:background="#bf1f3e">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:textSize="@dimen/join_event_category_textsize"
                     android:text="其他"
+                    android:gravity="center"
                     android:id="@+id/textView5" />
             </RelativeLayout>
         </LinearLayout>

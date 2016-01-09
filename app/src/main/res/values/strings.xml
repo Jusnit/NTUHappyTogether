@@ -18,6 +18,17 @@
     <string name="cancel">取消活動</string>
     <string name="ask_cancel">確定要取消?</string>
     <string name="confirm">確定</string>
+    <string name="waiting">等待開始</string>
+    <string name="finish">已經結束</string>
+    <string name="thankful">感謝參與本活動!</string>
+    <string name="thankfuldetail">祝您活動愉快!\n要給主辦人一個讚嗎?</string>
+    <string name="ok">好</string>
+    <string name="no">不，謝謝</string>
+
+
+
+
+
 
 
     <string name="modify">修改活動資訊</string>
@@ -35,6 +46,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_event_controller">EventController</string>
+
 
 
 

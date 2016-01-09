@@ -9,8 +9,8 @@ import ParseUtil.ParseFunction;
  */
 public class NormalAccountBuilder implements AccountBuilder{
     @Override
-    public Account buildAccount(String name,String pwd,String email){
-        ParseFunction.signUp(name, pwd,email);
+    public Account buildAccount(String name,String pwd,String email,String nickname){
+        ParseFunction.signUp(name, pwd,email,nickname);
         return new Account(name,pwd,email);
 
     }

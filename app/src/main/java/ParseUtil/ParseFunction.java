@@ -29,13 +29,14 @@ import loginregister.LoginActivity;
 public class ParseFunction {
     private static final String tag = "ParseFunction";
 
-    public static void createEvent(String title,String context,int limit,String userId,String time){
+    public static void createEvent(String title,String context,int limit,String userId,String time,String type){
         HashMap<String,Object> create = new HashMap();
         create.put("title",title);
         create.put("context", context);
         create.put("limit", limit);
         create.put("userId", userId);
         create.put("time",time);
+        create.put("type",type);
         ParseCloud.callFunctionInBackground("create", create, new FunctionCallback<String>() {
             public void done(String result, ParseException e) {
                 if (e == null) {
@@ -74,6 +75,20 @@ public class ParseFunction {
                     Log.i(tag, "Modify Exception:" + e.getMessage());
             }
         });
+    }
+
+    public  ArrayList<ParseObject> queryType(String type){
+        HashMap<String,String> querytitle = new HashMap();
+        querytitle.put("type", type);
+        final ArrayList<ParseObject> parseObjList = new ArrayList();
+        Flag flag = new Flag();
+        queryFunctionCallback qCallBack = new queryFunctionCallback(parseObjList,flag);
+
+        ParseCloud.callFunctionInBackground("query_type", querytitle, qCallBack);
+        while(!flag.queryFinished){
+            //do nothing.
+        }
+        return parseObjList;
     }
 
     public  ArrayList<ParseObject> queryEvent(String title){
@@ -163,11 +178,32 @@ public class ParseFunction {
         });
     }
 
-    public static void signUp(String name,String password,String email){
+    public static void rateEvent(String userId,String eventId,int rate){
+        HashMap<String, Object> rateMap = new HashMap();
+        rateMap.put("eventId", eventId);
+        rateMap.put("userId", userId);
+        rateMap.put("rate",rate);
+        ParseCloud.callFunctionInBackground("rate", rateMap, new FunctionCallback<String>() {
+            public void done(String result, ParseException e) {
+                if (e == null) {
+                    if (result == null) {
+                        Log.i(tag, "rate null");
+                    } else
+                        Log.i(tag, "Ratecomplete");
+
+
+                }
+            }
+        });
+    }
+
+    public static void signUp(String name,String password,String email,String nickname){
         ParseUser user = new ParseUser();
         user.setUsername(name);
         user.setPassword(password);
         user.setEmail(email);
+        user.put("nickname",nickname);
+        user.put("rating",0);
         user.put("InstallationId", ParseInstallation.getCurrentInstallation().getObjectId());
         user.signUpInBackground(new SignUpCallback() {
             public void done(ParseException e) {
@@ -187,13 +223,19 @@ public class ParseFunction {
         ParseUser.logInInBackground(name, password, new LogInCallback() {
             public void done(ParseUser user, ParseException e) {
                 if (user != null) {
-                    user.put("InstallationId", ParseInstallation.getCurrentInstallation().getObjectId());
-                    user.saveInBackground();
-                    // Hooray! The user is logged in.
-                    Log.i(tag, "login:" + "login success");
-                    activity.startActivity(new Intent().setClass(activity, Lobby.class));
-                    Log.i(tag, "user login後切換畫面");
+                    if(!user.getBoolean("emailVerified")){
+                        Toast t1 = Toast.makeText(activity, "尚未經過信箱認證!\n請至信箱收認證信件", Toast.LENGTH_LONG);
+                        t1.show();
 
+                    }else {
+                        user.put("InstallationId", ParseInstallation.getCurrentInstallation().getObjectId());
+                        user.saveInBackground();
+                        // Hooray! The user is logged in.
+                        Log.i(tag, "login:" + "login success");
+                        if(user.getBoolean("emailVerified"))
+                            activity.startActivity(new Intent().setClass(activity, Lobby.class));
+                        Log.i(tag, "user login後切換畫面");
+                    }
                 } else {
                     Log.i(tag, "login:" + e.toString());
                     Toast t1 = Toast.makeText(activity, "帳號或密碼錯誤!", Toast.LENGTH_SHORT);

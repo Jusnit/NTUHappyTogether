@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -18,18 +17,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.user.ntuhappytogether.EventController;
+import com.example.user.ntuhappytogether.Query;
+import com.example.user.ntuhappytogether.EventQueryByTitle;
+import com.example.user.ntuhappytogether.EventQueryByType;
 import com.example.user.ntuhappytogether.R;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ParseUtil.ParseFunction;
-import loginregister.TextValidation;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -56,7 +59,11 @@ public class SearchEvent extends Fragment{
     private ListView eventList;
     private Button searchingButton;
 
+    private TextView eat,sport,other;
+
     private ArrayList<ParseObject> eventObjList;
+    private List<ParseObject> participantList;
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -103,10 +110,18 @@ public class SearchEvent extends Fragment{
         super.onActivityCreated(savedInstanceState);
         Log.d(tag, "onActivityCreated");
         eventObjList = new ArrayList();
+        participantList = new ArrayList();
         setWidget();
 
     }
     private void setWidget(){
+        eat = (TextView)getActivity().findViewById(R.id.textView3);
+        sport = (TextView)getActivity().findViewById(R.id.textView4);
+        other = (TextView)getActivity().findViewById(R.id.textView5);
+        eat.setOnClickListener(new OnEatListener());
+        sport.setOnClickListener(new OnSportListener());
+        other.setOnClickListener(new OnOtherListener());
+
         keyWord = (EditText)getActivity().findViewById(R.id.keyword);
         eventList = (ListView)getActivity().findViewById(R.id.listView);
         searchingButton = (Button)getActivity().findViewById(R.id.searching_button);
@@ -115,22 +130,60 @@ public class SearchEvent extends Fragment{
 
 
     private class OnSearchingListener implements View.OnClickListener{
+
             @Override
             public void onClick(View v){
                 Log.i(tag, "onclick");
                 final String  key_word= keyWord.getText().toString();
                 if(key_word == null)  return;
                 boolean flag = false;
-                new Thread((new queryRunnable(key_word,flag))).start();
+                new Thread((new queryRunnable(key_word,flag,new EventQueryByTitle(key_word)))).start();
             }
         }
+    private class OnEatListener implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v){
+            Log.i(tag, "onclick");
+//            final String  key_word= keyWord.getText().toString();
+            final String  key_word= ((TextView)v).getText().toString();
+            if(key_word == null)  return;
+            boolean flag = false;
+            new Thread((new queryRunnable(key_word,flag,new EventQueryByType(key_word)))).start();
+        }
+    }
+    private class OnSportListener implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v){
+            Log.i(tag, "onclick");
+//            final String  key_word= keyWord.getText().toString();
+            final String  key_word= ((TextView)v).getText().toString();
+            if(key_word == null)  return;
+            boolean flag = false;
+            new Thread((new queryRunnable(key_word,flag,new EventQueryByType(key_word)))).start();
+        }
+    }
+    private class OnOtherListener implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v){
+            Log.i(tag, "onclick");
+            final String  key_word= ((TextView)v).getText().toString();
+            if(key_word == null)  return;
+            boolean flag = false;
+            new Thread((new queryRunnable(key_word,flag,new EventQueryByType(key_word)))).start();
+        }
+    }
 
 
         class queryRunnable implements Runnable{
             private String keyword;
+            private Query query;
             ProgressDialog pd;
-            queryRunnable(String keyword,boolean flag){
+            queryRunnable(String keyword,boolean flag,Query query){
                 this.keyword = keyword;
+                this.query = query;
             }
             @Override
             public void run() {
@@ -146,7 +199,8 @@ public class SearchEvent extends Fragment{
                         pd.show();
                     }
                 });
-                eventObjList = parseFun.queryEvent(this.keyword);
+//                eventObjList = parseFun.queryEvent(this.keyword);
+                eventObjList = query.query();
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -163,6 +217,8 @@ public class SearchEvent extends Fragment{
                         int count = 0;
                         for (ParseObject temp : eventObjList) {
                             Log.i(tag, "parseObj is not null");
+                            Log.i(tag, "host rating="+temp.getNumber("hostrate").toString());
+
                             values[count++] = temp.getString("title");
                         }
                         ListAdapter adapter = new ArrayAdapter<String>(getActivity(), R.layout.my_simple_listview, values);
@@ -177,6 +233,46 @@ public class SearchEvent extends Fragment{
                                 TextView event = (TextView)item.findViewById(R.id.event_discribe);
                                 TextView limit = (TextView)item.findViewById(R.id.limit_describe);
                                 TextView type = (TextView)item.findViewById(R.id.eventtype_describe);
+                                TextView rate = (TextView)item.findViewById(R.id.host_score);
+                                TextView current = (TextView)item.findViewById(R.id.currentPeople);
+                                TextView hostname = (TextView)item.findViewById(R.id.hostname);
+                                TextView starttime = (TextView)item.findViewById(R.id.start_time);
+
+                                ParseRelation<ParseObject> relation = (eventObjList.get(pos)).getRelation("participant");
+                                ParseObject outtemp  = ParseObject.create("class");
+                                try {
+                                    participantList = relation.getQuery().find();
+                                    for(ParseObject innertemp : participantList){
+                                        Log.i(tag,"Participant List:"+innertemp.getString("nickname"));
+                                        if(innertemp.getObjectId().equals(eventObjList.get(pos).getString("host"))){
+                                            hostname.setText(innertemp.getString("nickname"));
+                                            outtemp = innertemp;
+                                            break;
+
+                                        }
+
+
+                                    }
+
+
+                                }catch(ParseException e){Log.i(tag,"relationQuery Problem:"+e.toString());}
+                                //hostname.setText(outtemp.getString("name"));
+
+                                participantList.remove(outtemp);
+                                Spinner joinspinner = (Spinner)item.findViewById(R.id.join_spinner);
+                                String[] values = new String[participantList.size()];
+                                for(int i = 0;i < participantList.size(); i++){
+                                    values[i] = participantList.get(i).getString("username");
+                                }
+                                ArrayAdapter<String> adp3 = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item,values);
+                                adp3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                joinspinner.setAdapter(adp3);
+
+                                starttime.setText(eventObjList.get(pos).getString("time_str"));
+
+                                type.setText(eventObjList.get(pos).getString("type"));
+                                current.setText(""+eventObjList.get(pos).getNumber("counter"));
+                                rate.setText(""+eventObjList.get(pos).getNumber("hostrate")+"讚");
                                 TextView eventDetail = (TextView)item.findViewById(R.id.eventdetail);
                                 event.setText(eventObjList.get(pos).getString("title"));
                                 limit.setText(""+eventObjList.get(pos).getNumber("limit"));
